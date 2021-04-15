@@ -1,0 +1,51 @@
+{
+  "name": "educatools",
+  "version": "1.0.0",
+  "description": "Ferramentas educacionais da boa",
+  "main": "app.js",
+  "scripts": {
+    "start": "npm install && npm run gulp-prod && cross-env NODE_ENV=production node app",
+    "dev": "concurrently \"npm run server\" \"npm run gulp-dev\"",
+    "server": "cross-env NODE_ENV=development nodemon app",
+    "gulp-dev": "gulp dev",
+    "gulp-prod": "gulp build",
+    "postinstall": "node ./scripts/post-install.js"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "src/",
+      "public/"
+    ]
+  },
+  "author": "educatools",
+  "license": "MIT",
+  "dependencies": {
+    "browser-sync": "^2.23.6",
+    "concurrently": "^5.3.0",
+    "connect-mongo": "^3.2.0",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
+    "express-session": "^1.17.1",
+    "fs-extra": "^9.0.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-less": "^4.0.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-rename": "^2.0.0",
+    "method-override": "^3.0.0",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.19",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

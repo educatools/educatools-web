@@ -1,0 +1,111 @@
+<main role="main">
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalRecomendacao" tabindex="-1" role="dialog" aria-labelledby="modalRecomendacao"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Recomendar site ou ferramenta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Preencha os campos abaixos para recomendar um site ou ferramenta que você conheça.</p>
+
+          <!-- Formulário de recomendação de ferramenta -->
+          <form id="recommendationForm" name="sugestaoForm">
+            <div class="form-group">
+              <label for="nomeCompletoInput">Usuário</label>
+              <input name="nome" type="text" class="form-control" id="nomeCompletoInput" aria-describedby="ajuda"
+                placeholder="Digite o seu usuário Móbile">
+            </div>
+            <div class="form-group">
+              <label for="ferramentaInput">Nome da ferramenta ou site</label>
+              <input name="ferramenta" type="text" class="form-control" id="ferramentaInput"
+                placeholder="Nome da ferramenta/site">
+            </div>
+            <div class="form-group">
+              <label for="urlFerramentaInput">Link</label>
+              <input name="url" type="text" class="form-control" id="urlFerramentaInput"
+                placeholder="Link da ferramenta">
+            </div>
+            <div class="form-group">
+              <label for="idealSelect">Ideal para...</label>
+              <select name="series" class="form-control" id="idealSelect">
+                <option value="Infantil">Infantil</option>
+                <option value="Ensino Fundamental 1">Ensino Fundamental 1</option>
+                <option value="Ensino Fundamental 2">Ensino Fundamental 2</option>
+                <option value="Ensino Fundamental">Ensino Fundamental (1 e 2)</option>
+                <option value="Todos">Todos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="experienciaTextArea">O que faz esta ferramenta?</label>
+              <textarea name="experiencia" class="form-control" id="experienciaTextArea" rows="3"
+                placeholder="Plataforma de jogos educacionais sobre matemática..."></textarea>
+            </div>
+            <button id="btnSendRecommendation" type="submit" class="btn btn-primary">Enviar recomendação</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Ferramentas Educacionais</h1>
+      <p class="lead text-muted">Abaixo você encontrará uma série de ferramentas utilizadas (e até mesmo criadas) pelo
+        corpo docente da Escola Móbile Integral e a equipe de tecnologia educacional (TE).</p>
+      <!-- Search box -->
+      <div class="searchbox">
+        <input id="searchbox" class="form-control" type="text" placeholder="Eu procuro por..."
+          aria-label="Eu procuro por...">
+      </div>
+      <button type="button" class="btn btn-success my-2" data-toggle="modal" data-target="#modalRecomendacao">
+        Quero sugerir uma ferramenta!
+      </button>
+      <br />
+      <!--
+        <button type="button" onClick="alert('Ops! Essa funcionalidade ainda não está pronta =P')" class="btn btn-info my-2">
+          Baixar extensão para Google Chrome
+        </button>
+        -->
+    </div>
+    <div>
+      <br /><br />
+      <p>Filtros</p>
+      <button type="button" class="btn btn-light btn-sm my-2 filter-button" data-filter="all">Sem filtro</button>
+      <button type="button" class="btn btn-success btn-sm my-2 filter-button" data-filter="infantil">Infantil</button>
+      <button type="button" class="btn btn-primary btn-sm my-2 filter-button" data-filter="ef1">Ensino Fundalmental
+        1</button>
+      <button type="button" class="btn btn-danger btn-sm my-2 filter-button" data-filter="ef2">Ensino Fundalmental
+        2</button>
+      <button type="button" class="btn btn-warning btn-sm my-2 filter-button" data-filter="ef">Ensino
+        Fundalmental</button>
+      <button type="button" class="btn btn-info btn-sm my-2 filter-button" data-filter="todos">Todos</button>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div id="ferramentas" class="row">
+        <!-- preenchido via ajax -->
+        <div class="col-md-12 text-center">
+          <img src="assets/pacman.svg" alt="Loading...">
+          <p>Carregando...</p>
+        </div>
+      </div>
+      <h2 id="warning" align="center">Não há resultados disponíveis</h2>
+    </div>
+  </div>
+
+</main>
+
+<footer class="bg-mobile-verde">
+  <div class="container">
+    <p class="text-center">Todos os direitos reservados. Escola Móbile Integral.</p>
+  </div>
+</footer>
