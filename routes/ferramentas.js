@@ -8,8 +8,6 @@ router.get('/', async (req, res) => {
   res.render('ferramentas/index');
 })
 
-
-
 router.post('/save', (request, response) => {
   const {username, title, url, grades, description, thumbnail } = request.body;
   const ferramenta = new Ferramenta({
