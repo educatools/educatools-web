@@ -86,6 +86,24 @@ router.get("/refuse/:id", (req, res) => {
   });
 });
 
+// @desc Retorna os dados de apenas uma ferramenta
+// @rota GET /ferramentas/:id
+router.get('/:id', (req, res) => {
+  const idFerramenta = req.params.id;
+  console.log("idFerramenta", idFerramenta);
+  res.send({
+    "teste": "teste"
+  })
+  // Ferramenta.findOne({idFerramenta}, (err, ferramenta) => {
+  //   if(!err) {
+  //     res.send(ferramenta)
+  //   } else {
+  //     res.sendStatus(404);
+  //   }
+  // })
+})
+
+
 // @descrição  Mostra todas as ferramentas cadastradas
 // @rota       GET /ferramentas/all
 router.get('/all', (req, res) => {

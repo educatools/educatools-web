@@ -1,7 +1,41 @@
+const URL_PRODUCAO = 'https://mobile-tools.herokuapp.com';
+const URL_DEV = "localhost:3000";
+
 $(document).ready(() => {
   showAllRecommendations();
   searchForRecommendation();
+  preparaModalFerramenta();
 });
+
+function preparaModalFerramenta(){
+  const modalFerramenta = document.getElementById('modalFerramenta');
+  modalFerramenta.addEventListener('show.bs.modal', function (e) {
+    // Button that triggered the modal
+    const button = e.relatedTarget;
+    // Extract info from data-bs-* attributes
+    const recipient = button.getAttribute('data-bs-idFerramenta');
+    // If necessary, you could initiate an AJAX request here
+    // and then do the updating in a callback.
+    buscaDadosDaFerramenta(recipient);
+  })
+}
+
+function buscaDadosDaFerramenta(id) {
+  $.ajax({
+    url: `${URL_DEV}/ferramentas/${id}`,
+    success: function (ferramenta) {
+      alert("buscou a ferramenta");
+      console.log("ferramenta", ferramenta);
+
+      // Update the modal's content.
+      var modalTitle = modalFerramenta.querySelector('.modal-title');
+      var modalBodyInput = modalFerramenta.querySelector('.modal-body input');
+
+      modalTitle.textContent = 'New message to ' + ferramenta.teste;
+      modalBodyInput.value = ferramenta.teste;
+    }
+  });
+}
 
 document.getElementById("btnSendRecommendation").addEventListener("click", (event) => {
   event.preventDefault();
