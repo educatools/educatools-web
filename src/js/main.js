@@ -6,18 +6,16 @@ $(document).ready(() => {
   searchForRecommendation();
   preparaModalFerramenta();
   $("#modalFerramenta").fitVids(); // faz com que o vídeo ocupe o espaço disponível no modal
-
-  $("#btn-fecharvideo").click(() => {
-    $("#iframe-youtube").attr("src", "");
-  })
 });
 
 function preparaModalFerramenta(){
   const modalFerramenta = document.getElementById('modalFerramenta');
+  modalFerramenta.addEventListener("hide.bs.modal", (e) => {
+    $("#iframe-youtube").attr("src", "");
+  })
+  
   modalFerramenta.addEventListener('show.bs.modal', function (e) {
-    // Button that triggered the modal
     const button = e.relatedTarget;
-    // Extract info from data-bs-* attributes
     const recipient = button.getAttribute('data-bs-idFerramenta');
     // If necessary, you could initiate an AJAX request here
     // and then do the updating in a callback.
@@ -136,8 +134,8 @@ function Ferramenta(title, thumbnail, description, url, isMobile, grades, userna
     const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
 
     return `
-      <div class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
-        <a href="${this.url}" rel="noopener noreferrer" target="_blank" class="custom-card">
+      <div onclick="trocaConteudoModal('xxx')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
+        <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
             <div class="card-body">
               <h5 class="card-title">
@@ -192,11 +190,25 @@ function Ferramenta(title, thumbnail, description, url, isMobile, grades, userna
 
 }
 
+
+$(".ferramenta").click(() => {
+  console.log("passei aqui");
+  const idFerramenta = $(this).attr("idFerramenta");
+  trocaConteudoModal(idFerramenta);
+});
+
+function trocaConteudoModal(idFerramenta) {
+  console.log("idFerramentaIdentificado", idFerramenta);
+  $('#modalFerramenta').modal('show');
+}
+
+
+
+
+
+// BOTOES DE FILTRO
 $(".filter-button").click(function () {
-  console.log("tentando filtrar...");
-
   var value = $(this).attr('data-filter');
-
   if (value == "all") {
     //$('.filter').removeClass('hidden');
     $('.filter').show('1000');
@@ -206,7 +218,6 @@ $(".filter-button").click(function () {
     //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
     $(".filter").not('.' + value).hide('3000');
     $('.filter').filter('.' + value).show('3000');
-
   }
 });
 
