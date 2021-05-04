@@ -5,6 +5,11 @@ $(document).ready(() => {
   showAllRecommendations();
   searchForRecommendation();
   preparaModalFerramenta();
+  $("#modalFerramenta").fitVids(); // faz com que o vídeo ocupe o espaço disponível no modal
+
+  $("#btn-fecharvideo").click(() => {
+    $("#iframe-youtube").attr("src", "");
+  })
 });
 
 function preparaModalFerramenta(){

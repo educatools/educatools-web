@@ -54,29 +54,28 @@
   </div>
 
   <!-- modal de ferramenta -->
-  <div id="modalFerramenta" class="modal fade" tabindex="-1" role="dialog"
+  <div id="modalFerramenta" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
     aria-labelledby="modalFerramenta" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="exampleModalLabel">Nome da Ferramenta</h5>
+          <button id="btn-fecharvideo" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">Recipient:</label>
-              <input type="text" class="form-control" id="recipient-name">
-            </div>
-            <div class="mb-3">
-              <label for="message-text" class="col-form-label">Message:</label>
-              <textarea class="form-control" id="message-text"></textarea>
-            </div>
-          </form>
+          <div class="mb-3">
+            <iframe id="iframe-youtube" width="560" height="315" src="https://www.youtube.com/embed/jkp67--qH94" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="mb-3">
+            <h5>Descrição</h5><p>aaaaa</p>
+          </div>
+          <div class="mb-3">
+            <h5>Acesso</h5><a target="_blank" href="google.com.br">Acessar</a>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Send message</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary">Acessar</button>
         </div>
       </div>
     </div>
