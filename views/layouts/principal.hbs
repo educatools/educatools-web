@@ -15,36 +15,57 @@
 
           <!-- Formulário de recomendação de ferramenta -->
           <form id="recommendationForm" name="sugestaoForm">
+            
+            <!-- id -->
             <div class="form-group">
-              <label for="nomeCompletoInput">Usuário</label>
-              <input name="nome" type="text" class="form-control" id="nomeCompletoInput" aria-describedby="ajuda"
-                placeholder="Digite o seu usuário Móbile">
+              <label for="modal-recomendacao-ferramenta-id">Identificador</label>
+              <input name="identificador" type="text" class="form-control" id="modal-recomendacao-ferramenta-id" aria-describedby="identificador único"
+                placeholder="Digite um identificador para esta ferramenta">
             </div>
+            
+            <!-- usuario -->
             <div class="form-group">
-              <label for="ferramentaInput">Nome da ferramenta ou site</label>
-              <input name="ferramenta" type="text" class="form-control" id="ferramentaInput"
-                placeholder="Nome da ferramenta/site">
+              <label for="modal-recomendacao-ferramenta-usuario">Usuário</label>
+              <input name="usuario" type="text" class="form-control" id="modal-recomendacao-ferramenta-usuario" aria-describedby="usuário"
+                placeholder="nome de usuário">
             </div>
+
+            <!-- nome da ferramenta/site -->
             <div class="form-group">
-              <label for="urlFerramentaInput">Link</label>
-              <input name="url" type="text" class="form-control" id="urlFerramentaInput"
+              <label for="modal-recomendacao-ferramenta-nome">Nome da ferramenta ou site</label>
+              <input name="nome" type="text" class="form-control" id="modal-recomendacao-ferramenta-nome"
+                placeholder="Nome da ferramenta ou site">
+            </div>
+
+            <!-- url -->
+            <div class="form-group">
+              <label for="modal-recomendacao-ferramenta-url">Url (Link)</label>
+              <input name="url" type="text" class="form-control" id="modal-recomendacao-ferramenta-url"
                 placeholder="Link da ferramenta">
             </div>
+
+            <!-- ciclos -->
             <div class="form-group">
-              <label for="idealSelect">Ideal para...</label>
-              <select name="series" class="form-control" id="idealSelect">
+              <label for="modal-recomendacao-ferramenta-ciclos">Ideal para...</label>
+              <select name="ciclos" class="form-control" id="modal-recomendacao-ferramenta-ciclos">
                 <option value="Infantil">Infantil</option>
                 <option value="Ensino Fundamental 1">Ensino Fundamental 1</option>
                 <option value="Ensino Fundamental 2">Ensino Fundamental 2</option>
                 <option value="Ensino Fundamental">Ensino Fundamental (1 e 2)</option>
+                <option value="Ensino Médio">Ensino Médio</option>
+                <option value="Ensino Superior">Ensino Superior</option>
                 <option value="Todos">Todos</option>
               </select>
             </div>
+
+            <!-- descrição -->
             <div class="form-group">
-              <label for="experienciaTextArea">O que faz esta ferramenta?</label>
-              <textarea name="experiencia" class="form-control" id="experienciaTextArea" rows="3"
+              <label for="modal-recomendacao-ferramenta-descricao">O que faz?</label>
+              <textarea name="descricao" class="form-control" id="modal-recomendacao-ferramenta-descricao" rows="3"
                 placeholder="Plataforma de jogos educacionais sobre matemática..."></textarea>
             </div>
+
+            <!-- botao -->
             <button id="btnSendRecommendation" type="submit" class="btn btn-primary">Enviar recomendação</button>
           </form>
 
@@ -80,8 +101,6 @@
       </div>
     </div>
   </div>
-
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFerramenta" data-bs-idFerramenta="abacate">Abacate</button>
 
   <section class="jumbotron text-center">
     <div class="container">

@@ -6,25 +6,37 @@ const Ferramenta = require('../models/Ferramenta');
 
 router.get('/', async (req, res) => {
   res.render('ferramentas/index');
-})
+});
 
-router.post('/save', (request, response) => {
-  const {username, title, url, grades, description, thumbnail } = request.body;
+// @descrição  Mostra todas as ferramentas cadastradas
+// @rota       GET /ferramentas/all
+router.get('/all', (req, res) => {
+  Ferramenta.find({}, (err, ferramentas) => {
+    console.log("ferramentas que encontrei", ferramentas);
+    if(!err) res.send(ferramentas);
+    else {
+      console.error(err);
+    }
+  }).sort({date: 'desc'});
+});
+
+router.post('/salvar', (request, response) => {
+  const {id, usuario, nome, url, ciclos, descricao} = request.body;
+  console.log("request-body", request.body);
+  
   const ferramenta = new Ferramenta({
+    id,
     url,
-    title,
-    grades,
-    username, 
-    thumbnail,
-    description,
-    approved: false,
-    isMobile: false,
-    id: Date.now().toString(),
-    date: new Date().toISOString().replace(/T/,' ').replace(/\..+/,'')
+    usuario,
+    data: new Date().toISOString().replace(/T/,' ').replace(/\..+/,''),
+    nome,
+    descricao, 
+    ciclos,
+    // id: Date.now().toString(),
   });
 
   // para ver no histórico de log
-  console.log(`salvando: ${url} por ${username}`);
+  console.log(`salvando: ${url} por ${usuario}`);
 
   ferramenta.save(err => {
     if(err) {
@@ -88,7 +100,7 @@ router.get("/refuse/:id", (req, res) => {
 
 // @desc Retorna os dados de apenas uma ferramenta
 // @rota GET /ferramentas/:id
-router.get('/:id', (req, res) => {
+router.get('/detalhes/:id', (req, res) => {
   const idFerramenta = req.params.id;
   console.log("idFerramenta", idFerramenta);
   res.send({
@@ -102,15 +114,6 @@ router.get('/:id', (req, res) => {
   //   }
   // })
 })
-
-
-// @descrição  Mostra todas as ferramentas cadastradas
-// @rota       GET /ferramentas/all
-router.get('/all', (req, res) => {
-  Ferramenta.find({"approved": true}, (err, ferramentas) => {
-    if(!err) res.send(ferramentas);
-  }).sort({date: 'desc'});
-});
 
 // tela de aprovação
 router.get('/links', (req, res) => {

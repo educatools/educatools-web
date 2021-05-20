@@ -1,31 +1,38 @@
-const URL_PRODUCAO = 'https://mobile-tools.herokuapp.com';
-const URL_DEV = "localhost:3000";
+const URL_API = window.location.href.substr(0, window.location.href.length - 1);
+
+// variáveis de controle
+let FERRAMENTA_SELECIONADA = null;
 
 $(document).ready(() => {
-  showAllRecommendations();
-  searchForRecommendation();
-  preparaModalFerramenta();
-  $("#modalFerramenta").fitVids(); // faz com que o vídeo ocupe o espaço disponível no modal
+  mostraTodasFerramentas();
+  configuraFiltrosDeBusca();
+  configuraDisparosDoModal();
+  
+  // faz com que o vídeo ocupe o espaço todo disponível no modal
+  $("#modalFerramenta").fitVids();
 });
 
-function preparaModalFerramenta(){
+function configuraDisparosDoModal(){
   const modalFerramenta = document.getElementById('modalFerramenta');
+  
+  // evento: esconder modal
   modalFerramenta.addEventListener("hide.bs.modal", (e) => {
     $("#iframe-youtube").attr("src", "");
-  })
+  });
   
+  // evento abrir modal
   modalFerramenta.addEventListener('show.bs.modal', function (e) {
-    const button = e.relatedTarget;
-    const recipient = button.getAttribute('data-bs-idFerramenta');
-    // If necessary, you could initiate an AJAX request here
-    // and then do the updating in a callback.
-    buscaDadosDaFerramenta(recipient);
+    console.log("disparei evento de open do modal");
+    console.log("ferramenta seleciona", FERRAMENTA_SELECIONADA);
+    
+    //TODO: FAZ BUSCA AJAX
+    buscaDadosFerramenta(FERRAMENTA_SELECIONADA);
   })
 }
 
-function buscaDadosDaFerramenta(id) {
+function buscaDadosFerramenta(id) {
   $.ajax({
-    url: `${URL_DEV}/ferramentas/${id}`,
+    url: `${URL_API}/ferramentas/detalhes/${id}`,
     success: function (ferramenta) {
       alert("buscou a ferramenta");
       console.log("ferramenta", ferramenta);
@@ -39,45 +46,16 @@ function buscaDadosDaFerramenta(id) {
     }
   });
 }
-
-document.getElementById("btnSendRecommendation").addEventListener("click", (event) => {
-  event.preventDefault();
-  saveRecomendation();
-});
-
-function saveRecomendation() {
-  const data = {
-    url: $("#urlFerramentaInput")[0].value,
-    title: $("#ferramentaInput")[0].value,
-    grades: $("#idealSelect")[0].value,
-    username: $("#nomeCompletoInput")[0].value,
-    description: $("#experienciaTextArea")[0].value,
-    date: new Date()
-  };
-
-  $.post({
-    data,
-    url: `https://mobile-tools.herokuapp.com/save`,
-    success: () => {
-      $('#modalRecomendacao').modal('hide');
-      alert('Sua recomendação foi enviada!');
-    },
-    error: (err) => {
-      console.error("err", err);
-      alert('Ocorreu um erro! =(');
-    }
-  });
-}
-
-function showAllRecommendations() {
-  const url = 'https://mobile-tools.herokuapp.com/all';
+function mostraTodasFerramentas() {
   $.ajax({
-    url,
+    url: `${URL_API}/ferramentas/all`,
     success: function (ferramentas) {
+      console.log('f',ferramentas)
+      
       let ferramentasHTML = [];
       if (ferramentas) {
-        ferramentasHTML = ferramentas.map(({ title, thumbnail, description, url, isMobile, grades, username }) => {
-          return new Ferramenta(title, thumbnail, description, url, isMobile, grades, username);
+        ferramentasHTML = ferramentas.map(({ id, url, data, nome, descricao, ciclos, usuario }) => {
+          return new Ferramenta(id, url, data, nome, descricao, ciclos, usuario);
         });
       }
 
@@ -92,7 +70,7 @@ function showAllRecommendations() {
   });
 }
 
-function searchForRecommendation() {
+function configuraFiltrosDeBusca() {
   // shows or hides the recommendations based on the user search
   $("#searchbox").on("keyup", function () {
     const searchTerm = $(this).val().toLowerCase();
@@ -119,35 +97,36 @@ function searchForRecommendation() {
   });
 }
 
-function Ferramenta(title, thumbnail, description, url, isMobile, grades, username) {
+function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
+  this.id = id;
   this.url = url;
-  this.title = title;
-  this.username = username;
-  this.description = description;
-  this.grades = grades || 'Todos';
-  this.isMobile = isMobile || false;
-  this.thumbnail = thumbnail || 'https://via.placeholder.com/225x100';
+  this.data = data;
+  this.nome = nome;
+  this.descricao = descricao;
+  this.ciclos = ciclos || 'Todos';
+  this.usuario = usuario;
 
   this.montaFerramentaHTML = function () {
     const hostname = new URL(this.url).hostname;
     const faviconSize = 15;
     const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
+    const idFerramenta = this.id;
 
     return `
-      <div onclick="trocaConteudoModal('xxx')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
+      <div onclick="abreModal('${idFerramenta}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
         <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
             <div class="card-body">
               <h5 class="card-title">
-                <img src="${favicon}" style="padding-bottom: 5px;" width="25px"/>&nbsp ${this.title}
+                <img src="${favicon}" style="padding-bottom: 5px;" width="25px"/>&nbsp ${this.nome}
               </h5>
-              <p class="card-text">${this.description}</p>
+              <p class="card-text">${this.descricao}</p>
               <div class="d-flex justify-content-center align-items-center">
                 <div class="flex-grow-1">
                   <small class="text-muted">para:&nbsp</small>
-                  ${this.__montaBadges()}&nbsp&nbsp&nbsp${this.__isFeitoPelaMobile()}
+                  ${this.__montaBadges()}
                 </div>
-                <small class="text-muted"><b>sugerido por:</b> ${this.username}</small>
+                <small class="text-muted"><b>sugerido por:</b> ${this.usuario}</small>
               </div>
             </div>
           </div>
@@ -157,14 +136,16 @@ function Ferramenta(title, thumbnail, description, url, isMobile, grades, userna
   };
 
   this.__montaCategoriaClasse = function () {
-    const grades = new Map();
-    grades.set('Infantil', 'infantil');
-    grades.set('Ensino Fundamental 1', 'ef1');
-    grades.set('Ensino Fundamental 2', 'ef2');
-    grades.set('Ensino Fundamental', 'ef');
-    grades.set('Todos', 'todos');
+    const ciclos = new Map();
+    ciclos.set('Infantil', 'infantil');
+    ciclos.set('Ensino Fundamental 1', 'ef1');
+    ciclos.set('Ensino Fundamental 2', 'ef2');
+    ciclos.set('Ensino Fundamental', 'ef');
+    ciclos.set('Ensino Médio', 'em');
+    ciclos.set('Ensino Superior', 'es');
+    ciclos.set('Todos', 'todos');
 
-    return grades.get(this.grades);
+    return ciclos.get(this.ciclos);
   };
 
   this.__montaBadges = function () {
@@ -175,35 +156,18 @@ function Ferramenta(title, thumbnail, description, url, isMobile, grades, userna
     badges.set('Ensino Fundamental', { texto: 'Ensino Fundamental', tipo: 'warning' });
     badges.set('Todos', { texto: 'Todos', tipo: 'info' });
 
-    const { texto, tipo } = badges.get(this.grades);
+    //TODO: colocar o restante das badges
 
-    return `<span class="badge badge-${tipo}" title="${this.grades}">${texto}</span>`
+    const { texto, tipo } = badges.get(this.ciclos);
+
+    return `<span class="badge badge-${tipo}" title="${this.ciclos}">${texto}</span>`
   };
-
-  this.__isFeitoPelaMobile = function () {
-    if (this.isMobile) {
-      return `<small class="text-muted"><i>✶ desenvolvido pela Móbile!</i></small>`
-    }
-
-    return '';
-  }
-
 }
 
-
-$(".ferramenta").click(() => {
-  console.log("passei aqui");
-  const idFerramenta = $(this).attr("idFerramenta");
-  trocaConteudoModal(idFerramenta);
-});
-
-function trocaConteudoModal(idFerramenta) {
-  console.log("idFerramentaIdentificado", idFerramenta);
+function abreModal(idFerramenta) {
+  FERRAMENTA_SELECIONADA = idFerramenta;
   $('#modalFerramenta').modal('show');
 }
-
-
-
 
 
 // BOTOES DE FILTRO
@@ -225,3 +189,37 @@ if ($(".filter-button").removeClass("active")) {
   $(this).removeClass("active");
 }
 $(this).addClass("active");
+
+
+
+// TODO: Código referente ao botão de recomendação de ferramentas
+
+document.getElementById("btnSendRecommendation").addEventListener("click", (event) => {
+  event.preventDefault();
+  salvarRecomencadaoFerramenta();
+});
+
+function salvarRecomencadaoFerramenta() {
+  const data = {
+    id: $("#modal-recomendacao-ferramenta-id")[0].value,
+    url: $("#modal-recomendacao-ferramenta-usuario")[0].value,
+    nome: $("#modal-recomendacao-ferramenta-nome")[0].value,
+    url: $("#modal-recomendacao-ferramenta-url")[0].value,
+    ciclos: $("#modal-recomendacao-ferramenta-ciclos")[0].value,
+    descricao: $("#modal-recomendacao-ferramenta-descricao")[0].value,
+    date: new Date()
+  };
+
+  $.post({
+    data,
+    url: `${URL_API}/ferramentas/salvar`,
+    success: () => {
+      $('#modalRecomendacao').modal('hide');
+      alert('Sua recomendação foi enviada!');
+    },
+    error: (err) => {
+      console.error("err", err);
+      alert('Ocorreu um erro! =(');
+    }
+  });
+}

@@ -9,6 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const connectDB = require('./config/db');
+const cors = require('cors');
 
 // Load dev config
 if(!isProducao()) {
@@ -31,6 +32,8 @@ if (isProducao()) {
     else //Se a requisição já é HTTPS 
         next(); //Não precisa redirecionar, passa para os próximos middlewares que servirão com o conteúdo desejado 
   });
+} else {
+  app.use(cors());
 }
 
 // Body parser

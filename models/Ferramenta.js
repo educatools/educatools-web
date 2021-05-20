@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const FerramentaSchema = mongoose.Schema({
+  id: {
+    type: String,
+    required: true
+  },
   url: {
     type: String,
     required: true
@@ -9,28 +13,22 @@ const FerramentaSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  titulo: {
+  nome: {
     type: String,
     required: true
   },
-  grades: {
+  descricao: {
     type: String,
     required: true
   },
-  username: {
+  ciclos: {
     type: String,
     required: true
   },
-  approved: {
-    type: Boolean,
-    required: true
-  },
-  description: {
+  usuario: {
     type: String,
-    required: true
+    required: false
   },
-  thumbnail: String,
-  isMobile: Boolean
 });
 
 module.exports = mongoose.model('Ferramenta', FerramentaSchema);
