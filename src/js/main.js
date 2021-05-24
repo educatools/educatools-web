@@ -23,26 +23,30 @@ function configuraDisparosDoModal(){
   // evento abrir modal
   modalFerramenta.addEventListener('show.bs.modal', function (e) {
     console.log("disparei evento de open do modal");
-    console.log("ferramenta seleciona", FERRAMENTA_SELECIONADA);
+    console.log("ferramenta selecionada", FERRAMENTA_SELECIONADA);
     
     //TODO: FAZ BUSCA AJAX
-    buscaDadosFerramenta(FERRAMENTA_SELECIONADA);
+    buscaDadosFerramenta(FERRAMENTA_SELECIONADA, (ferramenta) => {
+      
+      // Atualiza o modal de acordo com o conteúdo vindo da requisição AJAX
+      var modalTitle = modalFerramenta.querySelector('.modal-title');
+      var modalBodyInput = modalFerramenta.querySelector('#modal-ferramenta-descricao p');
+      var modalFerramentaURL = modalFerramenta.querySelector("#modal-ferramenta-url");
+
+      modalTitle.textContent = ferramenta.nome;
+      modalBodyInput.textContent = ferramenta.descricao;
+      modalFerramentaURL.setAttribute("href", ferramenta.url);
+    });
   })
 }
 
-function buscaDadosFerramenta(id) {
+function buscaDadosFerramenta(id, callback) {
   $.ajax({
     url: `${URL_API}/ferramentas/detalhes/${id}`,
     success: function (ferramenta) {
       alert("buscou a ferramenta");
       console.log("ferramenta", ferramenta);
-
-      // Update the modal's content.
-      var modalTitle = modalFerramenta.querySelector('.modal-title');
-      var modalBodyInput = modalFerramenta.querySelector('.modal-body input');
-
-      modalTitle.textContent = 'New message to ' + ferramenta.teste;
-      modalBodyInput.value = ferramenta.teste;
+      callback(ferramenta);
     }
   });
 }
