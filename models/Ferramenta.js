@@ -29,6 +29,10 @@ const FerramentaSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  video: {
+    type: String,
+    required: false
+  },
 });
 
 module.exports = mongoose.model('Ferramenta', FerramentaSchema);

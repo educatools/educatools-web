@@ -1,6 +1,4 @@
 const URL_API = window.location.href.substr(0, window.location.href.length - 1);
-
-// variáveis de controle
 let FERRAMENTA_SELECIONADA = null;
 
 $(document).ready(() => {
@@ -15,27 +13,28 @@ $(document).ready(() => {
 function configuraDisparosDoModal(){
   const modalFerramenta = document.getElementById('modalFerramenta');
   
-  // evento: esconder modal
+  // HIDE
   modalFerramenta.addEventListener("hide.bs.modal", (e) => {
-    $("#iframe-youtube").attr("src", "");
+    const video = $('#modal-ferramenta-iframe-youtube').attr("src");
+    $('#modal-ferramenta-iframe-youtube').attr("src","");
+    $('#modal-ferramenta-iframe-youtube').attr("src",video);
   });
   
-  // evento abrir modal
+  // SHOW
   modalFerramenta.addEventListener('show.bs.modal', function (e) {
-    console.log("disparei evento de open do modal");
-    console.log("ferramenta selecionada", FERRAMENTA_SELECIONADA);
-    
-    //TODO: FAZ BUSCA AJAX
+    //FIXME: Alterar callback para async/await ou pelo menos Promises
     buscaDadosFerramenta(FERRAMENTA_SELECIONADA, (ferramenta) => {
       
       // Atualiza o modal de acordo com o conteúdo vindo da requisição AJAX
-      var modalTitle = modalFerramenta.querySelector('.modal-title');
-      var modalBodyInput = modalFerramenta.querySelector('#modal-ferramenta-descricao p');
-      var modalFerramentaURL = modalFerramenta.querySelector("#modal-ferramenta-url");
+      const nome = modalFerramenta.querySelector('.modal-title');
+      const descricao = modalFerramenta.querySelector('#modal-ferramenta-descricao p');
+      const url = modalFerramenta.querySelector("#modal-ferramenta-url");
+      const iframe = modalFerramenta.querySelector("#modal-ferramenta-iframe-youtube");
 
-      modalTitle.textContent = ferramenta.nome;
-      modalBodyInput.textContent = ferramenta.descricao;
-      modalFerramentaURL.setAttribute("href", ferramenta.url);
+      nome.textContent = ferramenta.nome;
+      descricao.textContent = ferramenta.descricao;
+      url.setAttribute("href", ferramenta.url);
+      iframe.setAttribute("src", `https://www.youtube.com/embed/${ferramenta.video}`);
     });
   })
 }
@@ -43,19 +42,14 @@ function configuraDisparosDoModal(){
 function buscaDadosFerramenta(id, callback) {
   $.ajax({
     url: `${URL_API}/ferramentas/detalhes/${id}`,
-    success: function (ferramenta) {
-      alert("buscou a ferramenta");
-      console.log("ferramenta", ferramenta);
-      callback(ferramenta);
-    }
+    success: (ferramenta) => callback(ferramenta)
   });
 }
+
 function mostraTodasFerramentas() {
   $.ajax({
     url: `${URL_API}/ferramentas/all`,
     success: function (ferramentas) {
-      console.log('f',ferramentas)
-      
       let ferramentasHTML = [];
       if (ferramentas) {
         ferramentasHTML = ferramentas.map(({ id, url, data, nome, descricao, ciclos, usuario }) => {
@@ -63,8 +57,7 @@ function mostraTodasFerramentas() {
         });
       }
 
-      //remove o loading
-      $('#ferramentas').html('');
+      $('#ferramentas').html(''); //remove o loading
 
       // lista as ferramentas no HTML
       ferramentasHTML.forEach(ferramenta => {
@@ -196,8 +189,7 @@ $(this).addClass("active");
 
 
 
-// TODO: Código referente ao botão de recomendação de ferramentas
-
+// TODO: Códigos referente ao botão de recomendação de ferramentas
 document.getElementById("btnSendRecommendation").addEventListener("click", (event) => {
   event.preventDefault();
   salvarRecomencadaoFerramenta();
@@ -211,6 +203,7 @@ function salvarRecomencadaoFerramenta() {
     url: $("#modal-recomendacao-ferramenta-url")[0].value,
     ciclos: $("#modal-recomendacao-ferramenta-ciclos")[0].value,
     descricao: $("#modal-recomendacao-ferramenta-descricao")[0].value,
+    video: $("#modal-recomendacao-ferramenta-video")[0].value,
     date: new Date()
   };
 

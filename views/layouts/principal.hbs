@@ -65,6 +65,13 @@
                 placeholder="Plataforma de jogos educacionais sobre matemática..."></textarea>
             </div>
 
+            <!-- video -->
+            <div class="form-group">
+              <label for="modal-recomendacao-ferramenta-video">Vídeo no Youtube</label>
+              <input name="video" type="text" class="form-control" id="modal-recomendacao-ferramenta-video"
+                placeholder="URL vídeo no youtube">
+            </div>
+
             <!-- botao -->
             <button id="btnSendRecommendation" type="submit" class="btn btn-primary">Enviar recomendação</button>
           </form>
@@ -74,7 +81,7 @@
     </div>
   </div>
 
-  <!-- modal de ferramenta -->
+  <!-- modal da ferramenta -->
   <div id="modalFerramenta" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
     aria-labelledby="modalFerramenta" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -85,7 +92,7 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <iframe id="iframe-youtube" width="560" height="315" src="https://www.youtube.com/embed/jkp67--qH94" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="modal-ferramenta-iframe-youtube" width="560" height="315" src="https://www.youtube.com/embed/jkp67--qH94" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="mb-3" id="modal-ferramenta-descricao">
             <h5>Descrição</h5><p>Descrição da ferramenta</p>

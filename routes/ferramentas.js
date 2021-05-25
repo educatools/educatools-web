@@ -23,7 +23,7 @@ router.get('/all', (req, res) => {
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
 router.post('/salvar', (request, response) => {
-  const {id, usuario, nome, url, ciclos, descricao} = request.body;
+  const {id, usuario, nome, url, ciclos, descricao, video} = request.body;
   console.log("request-body", request.body);
   
   const ferramenta = new Ferramenta({
@@ -34,6 +34,7 @@ router.post('/salvar', (request, response) => {
     nome,
     descricao, 
     ciclos,
+    video
     // id: Date.now().toString(),
   });
 
