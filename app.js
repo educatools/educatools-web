@@ -11,15 +11,22 @@ const MongoStore = require('connect-mongo')(session);
 const connectDB = require('./config/db');
 const cors = require('cors');
 
+const GerenciadorUsuarios = require('./servicos/GerenciadorUsuarios');
+
 // Load dev config
 if(!isProducao()) {
   dotenv.config({ path: './config/config.env' });
 }
 
 // Passport config
-require('./config/passport')(passport);
+require('./config/local_passport')(passport);
 
-connectDB();
+async function conectaBancoDedados() {
+  await connectDB();
+  GerenciadorUsuarios.criaUsuarioAdministrador();
+}
+
+conectaBancoDedados();
 
 const app = express();
 
@@ -108,14 +115,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', require('./routes/index'));
-app.use('/auth', require('./routes/auth'));
-app.use('/stories', require('./routes/stories'));
+app.use('/login', require('./routes/login'));
 app.use('/ferramentas', require('./routes/ferramentas'));
+app.use('/dashboard', require('./routes/dashboard'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(`SERVIDOR FUNCIONANDO. MODO: ${process.env.NODE_ENV} || PORTA: ${PORT}`)
 )
 
 function isProducao() {

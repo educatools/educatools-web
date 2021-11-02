@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { ensureAuth } = require('../middleware/auth');
 
-const Ferramenta = require('../models/Ferramenta');
+const Ferramenta = require('../modelos/Ferramenta');
 
 router.get('/', async (req, res) => {
   res.render('ferramentas/index');
