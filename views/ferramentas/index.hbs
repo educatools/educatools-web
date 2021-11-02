@@ -1,0 +1,38 @@
+<h1>Gerenciamento de ferramentas cadastradas</h1>
+<p>Estas são as ferramentas registradas.</p>
+{{#if ferramentas}}
+<table class="table striped align-middle">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Registro</th>
+            <th>Descrição</th>
+            <th>Usuário</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each ferramentas}}
+        <tr>
+            <td>{{nome}}</td>
+            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
+            <td><span class="dash-status">{{descricao}}</span></td>
+            <td><span class="dash-status">{{usuario}}</span></td>
+            <td style="display: flex; flex-direction:row; justify-content: center">
+                <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form action="/ferramentas/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{else}}
+    <p>Não há ferramentas cadastradas.</p>
+{{/if}}

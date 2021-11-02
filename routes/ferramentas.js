@@ -4,21 +4,43 @@ const { ensureAuth } = require('../middleware/auth');
 
 const Ferramenta = require('../modelos/Ferramenta');
 
-router.get('/', async (req, res) => {
-  res.render('ferramentas/index');
+router.get('/', ensureAuth, async (req, res) => {
+  const ferramentas = await Ferramenta.find({}).lean();
+  res.render('ferramentas/index', {
+    ferramentas 
+  });
+});
+
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const ferramenta = await Ferramenta.findOne({
+      _id: req.params.id,
+    }).lean()
+
+    if (!ferramenta) {
+      return res.render('error/404');
+    }
+
+    res.render('ferramentas/edit', {
+      ferramenta
+    });
+  } catch (err) {
+    console.error(err)
+    return res.render('error/500')
+  }
 });
 
 // @descrição  Mostra todas as ferramentas cadastradas
 // @rota       GET /ferramentas/all
-router.get('/all', (req, res) => {
-  Ferramenta.find({}, (err, ferramentas) => {
-    console.log("ferramentas que encontrei", ferramentas);
-    if(!err) res.send(ferramentas);
-    else {
-      console.error(err);
-    }
-  }).sort({date: 'desc'});
-});
+// router.get('/all', (req, res) => {
+//   Ferramenta.find({}, (err, ferramentas) => {
+//     console.log("ferramentas que encontrei", ferramentas);
+//     if(!err) res.send(ferramentas);
+//     else {
+//       console.error(err);
+//     }
+//   }).sort({date: 'desc'});
+// });
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar

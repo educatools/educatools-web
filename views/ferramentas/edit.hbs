@@ -1,0 +1,42 @@
+<h3>Editar Ferramenta</h3>
+
+<form id="formulario-conteudo" action="/ferramentas/{{conteudo._id}}" method="POST">
+  
+  <!-- esconde o método http - method override -->
+  <input type="hidden" name="_method" value="PUT">
+  
+  <!-- título -->
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome" value="{{ferramenta.nome}}">
+    <small id="titulo-help" class="form-text text-muted">Insira o nome da ferramenta.</small>
+  </div>
+
+  <!-- status -->
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <select id="nome" class="form-select" name="nome" aria-label="Default select example">
+      {{#select conteudo.status}}
+        <option value="Rascunho" selected>Rascunho</option>
+        <option value="Público">Público</option>\
+      {{/select}}
+    </select>
+    <small id="status-help" class="form-text text-muted">rascunho = privado.</small>
+  </div>
+
+  <!-- título -->
+  <div class="form-group">
+    <label for="titulo">Título</label>
+    <input type="text" class="form-control" id="titulo" name="titulo" aria-describedby="titulo-help" placeholder="título" value="{{conteudo.titulo}}">
+    <small id="titulo-help" class="form-text text-muted">Insira qual será o conceito tratado neste registro.</small>
+  </div>
+
+  <!-- corpo -->
+  <div class="form-group">
+    <label for="corpo">Corpo</label>
+    <textarea id="corpo" name="corpo">{{conteudo.corpo}}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Enviar!</button>
+
+</form>
