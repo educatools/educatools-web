@@ -13,7 +13,7 @@ const GerenciadorUsuarios = {
       const administrador = new Usuario({
         tipo: "admin",
         nome: process.env.ADMIN_NOME || "Administrador",
-        sobrenome: process.env.ADMIN_SOBRENOME || "",
+        sobrenome: process.env.ADMIN_SOBRENOME || "administrador",
         email: process.env.ADMIN_EMAIL || "admin",
         senha: process.env.ADMIN_SENHA || "admin"
       });
