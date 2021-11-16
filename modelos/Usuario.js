@@ -13,10 +13,6 @@ const UsuarioSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  sobrenome: {
-    type: String,
-    required: true,
-  },
   tipo: {
     type: String,
     default: 'usuario',

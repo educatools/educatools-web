@@ -3,6 +3,9 @@ const Usuario = require('../modelos/Usuario');
 
 const GerenciadorUsuarios = {
 
+  /**
+   * Cria o primeiro usuário administrador do sistema.
+   */
   async criaUsuarioAdministrador() {
 
     const usuarios = await Usuario.find({ tipo: "admin" });
@@ -10,27 +13,32 @@ const GerenciadorUsuarios = {
 
       console.log("Criando o usuário administrador");
 
-      const administrador = new Usuario({
-        tipo: "admin",
-        nome: process.env.ADMIN_NOME || "Administrador",
-        sobrenome: process.env.ADMIN_SOBRENOME || "administrador",
-        email: process.env.ADMIN_EMAIL || "admin",
-        senha: process.env.ADMIN_SENHA || "admin"
-      });
+      const nome =  process.env.ADMIN_NOME || "admin";
+      const email = process.env.ADMIN_EMAIL || "admin";
+      const senha = process.env.ADMIN_SENHA || "admin";
+      const tipo = "admin";
 
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(administrador.senha, salt, (err, hash) => {
-          if (err) throw err;
-          administrador.senha = hash;
-          administrador
-            .save()
-            .then(administrador => {
-              console.log("usuário administrador criado com sucesso", administrador);
-            })
-            .catch(err => console.log(err));
-        });
-      });
+      await this.criaUsuarioAdministrador(nome, email, tipo, senha);
+
     }
+
+  },
+
+  async criaUsuario(nome, email, tipo, senha) {
+
+    const usuario = new Usuario({tipo, email, nome, senha});
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(usuario.senha, salt, (err, hash) => {
+        if (err) throw err;
+        usuario.senha = hash;
+        usuario
+          .save()
+          .then(usuario => {
+            console.log("usuário criado com sucesso", usuario);
+          })
+          .catch(err => console.log(err));
+      });
+    });
 
   }
 }

@@ -1,0 +1,43 @@
+<h1>Usuários</h1>
+<p>Estes são os usuários cadastrados no sistema.</p>
+{{#if usuarios}}
+<table class="table striped align-middle">
+    <thead>
+        <tr>
+            <th>Nome completo</th>
+            <th>E-mail</th>
+            <th>Tipo</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each usuarios}}
+        <tr>
+            <td>{{nome}}</td>
+            <td>{{email}}</td>
+            <td><span class="dash-status">{{tipo}}</span></td>
+            <td>{{formatDate criadoEm 'DD/MM/yyyy'}}</td>
+
+            <td>
+                <a href="/usuarios/edit/{{_id}}" class="btn btn-float">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form action="/usuarios/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{else}}
+<p>Não há usuários cadastrados no sistema.</p>
+{{/if}}
+
+<a href="/usuarios/add" class="add-btn-float">
+<i class="fa fa-plus fbtn-float"></i>
+</a>
