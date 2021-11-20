@@ -1,13 +1,13 @@
-<h1>Gerenciamento de ferramentas cadastradas</h1>
-<p>Estas são as ferramentas registradas.</p>
+<h1>Ferramentas</h1>
+<p>Estas são as ferramentas cadastradas.</p>
 {{#if ferramentas}}
 <table class="table striped align-middle">
     <thead>
         <tr>
             <th>Nome</th>
-            <th>Registro</th>
             <th>Descrição</th>
             <th>Usuário</th>
+            <th>Criado em</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -15,10 +15,11 @@
         {{#each ferramentas}}
         <tr>
             <td>{{nome}}</td>
-            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
             <td><span class="dash-status">{{descricao}}</span></td>
             <td><span class="dash-status">{{usuario}}</span></td>
-            <td style="display: flex; flex-direction:row; justify-content: center">
+            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
+
+            <td>
                 <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
                     <i class="fas fa-edit"></i>
                 </a>
@@ -36,3 +37,7 @@
 {{else}}
     <p>Não há ferramentas cadastradas.</p>
 {{/if}}
+
+<a href="/ferramentas/add" class="add-btn-float">
+    <i class="fa fa-plus fbtn-float"></i>
+</a>

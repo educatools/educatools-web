@@ -1,0 +1,56 @@
+<h1>Criação de ferramentas</h1>
+<p>Preencha os dados abaixo para criar uma nova ferramenta.</p>
+
+<form id="formulario-ferramenta" action="/ferramentas" method="POST">
+
+  <!-- Identificador -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="id">Identificador</label>
+    <input type="text" class="form-control" id="id" name="id" aria-describedby="id-help" placeholder="id">
+    <small id="id-help" class="form-text text-muted">Identificador ferramenta</small>
+  </div>
+
+  <!-- Nome -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="nome">Nome</label>
+    <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome">
+    <small id="nome-help" class="form-text text-muted">Nome da ferramenta</small>
+  </div>
+
+  <!-- URL -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="url">Link de Acesso</label>
+    <input type="text" class="form-control" id="url" name="url" aria-describedby="url-help" placeholder="url">
+    <small id="url-help" class="form-text text-muted">Link de acesso para a ferramenta</small>
+  </div>
+
+  <!-- Descrição -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="descricao">Descrição</label>
+    <input type="text" class="form-control" id="descricao" name="descricao" aria-describedby="descricao-help" placeholder="descricao">
+    <small id="descricao-help" class="form-text text-muted">Uma breve descrição do que faz a ferramenta</small>
+  </div>
+
+  <!-- Ciclos -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="ciclos">Ciclo</label>
+    <select id="ciclos" class="form-select" name="ciclos" aria-describedby="ciclos-help" placeholder="ciclos">
+      <option value="todos" selected>Todos</option>
+      <option value="fundamental 1">Fundamental 1</option>
+      <option value="fundamental 2">Fundamental 2</option>
+      <option value="médio">Ensino Médio</option>
+      <option value="superior">Ensino Superior</option>
+    </select>
+    <small id="status-help" class="form-text text-muted">Melhor ciclo de uso da ferramenta</small>
+  </div>
+
+  <!-- Vídeo -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="video">Vídeo</label>
+    <input type="text" class="form-control" id="video" name="video" aria-describedby="video-help" placeholder="video">
+    <small id="video-help" class="form-text text-muted">Vídeo de apresentação da ferramenta (Youtube)</small>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Enviar</button>
+
+</form>

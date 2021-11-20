@@ -7,9 +7,13 @@ const Ferramenta = require('../modelos/Ferramenta');
 router.get('/', ensureAuth, async (req, res) => {
   const ferramentas = await Ferramenta.find({}).lean();
   res.render('ferramentas/index', {
-    ferramentas 
+    ferramentas
   });
 });
+
+router.get('/add', ensureAuth, async (req, res) => {
+  res.render('ferramentas/add');
+})
 
 router.get('/edit/:id', async (req, res) => {
   try {
@@ -32,117 +36,92 @@ router.get('/edit/:id', async (req, res) => {
 
 // @descrição  Mostra todas as ferramentas cadastradas
 // @rota       GET /ferramentas/all
-// router.get('/all', (req, res) => {
-//   Ferramenta.find({}, (err, ferramentas) => {
-//     console.log("ferramentas que encontrei", ferramentas);
-//     if(!err) res.send(ferramentas);
-//     else {
-//       console.error(err);
-//     }
-//   }).sort({date: 'desc'});
-// });
+router.get('/all', (req, res) => {
+  Ferramenta.find({ status: 'aprovado' }, (err, ferramentas) => {
+    console.log("ferramentas que encontrei", ferramentas);
+    if (!err) res.send(ferramentas);
+    else {
+      console.error(err);
+    }
+  }).sort({ date: 'desc' });
+});
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
-router.post('/salvar', (request, response) => {
-  const {id, usuario, nome, url, ciclos, descricao, video} = request.body;
+router.post('/', (request, response) => {
+  const { id, usuario, nome, url, ciclos, descricao, video } = request.body;
   console.log("request-body", request.body);
-  
+
   const ferramenta = new Ferramenta({
     id,
     url,
     usuario,
-    data: new Date().toISOString().replace(/T/,' ').replace(/\..+/,''),
+    data: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
     nome,
-    descricao, 
+    descricao,
     ciclos,
     video
-    // id: Date.now().toString(),
   });
 
-  // para ver no histórico de log
-  console.log(`salvando: ${url} por ${usuario}`);
-
   ferramenta.save(err => {
-    if(err) {
+    if (err) {
       console.error('Ocorreu um erro ao tentar gravar o registro no banco de dados.');
       console.error(err);
 
       response.sendStatus(500);
     }
     else {
-      response.sendStatus(200);
+      res.redirect('/ferramentas');
     }
   })
 });
 
-// router.get("/accept/:id", (req, res) => {
-//   const toolId = req.params.id;
+router.put('/:id', async (req, res) => {
+  try {
+    let ferramenta = await Ferramenta.findById(req.params.id).lean();
 
-//   // para ver no histórico de log
-//   console.log(`approving: document ${toolId}`);
+    if (!ferramenta) {
+      return res.render('error/404')
+    }
 
-//   Ferramenta.updateOne({"_id": toolId}, {"approved": true},  (err) => {
-//     if(!err) {
-//       res.sendStatus(200);
-//     } else {
-//       res.sendStatus(500);
-//     }
-//   });
-// });
+    ferramenta = await Ferramenta.findOneAndUpdate({
+      _id: req.params.id
+    },
+      req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-// router.post("/edit/:id", (req, res) => {
-//   const toolId = req.params.id;
-//   const body = req.body;
+    res.redirect('/ferramentas');
 
-//   // para ver no histórico de log
-//   console.log(`replacing: document ${toolId}`);
-  
-//   Ferramenta.replaceOne({"_id": toolId}, body,  (err) => {
-//     if(!err) {
-//       res.sendStatus(200);
-//     } else {
-//       console.error("Erro!>>>" + err);
-//       res.sendStatus(500);
-//     }
-//   });
-// });
+  } catch (err) {
+    console.error(err)
+    return res.render('error/500')
+  }
+});
 
-// router.get("/refuse/:id", (req, res) => {
-//   const toolId = req.params.id;
-
-//   // para ver no histórico de log
-//   console.log(`refusing: document ${toolId}`);
-
-//   Ferramenta.deleteOne({"_id": toolId}, (err) => {
-//     if(!err) {
-//       res.sendStatus(200);
-//     } else {
-//       res.sendStatus(500);
-//     }
-//   });
-// });
-
+router.delete('/:id', async (req, res) => {
+  try {
+      await Ferramenta.remove({ _id: req.params.id });
+      res.redirect('/ferramentas');
+  } catch (err) {
+      console.error(err);
+      return res.render('error/500');
+  }
+})
 
 // @desc Retorna os dados de apenas uma ferramenta
 // @rota GET /ferramentas/:id
 router.get('/detalhes/:id', (req, res) => {
   // lembre-se: id é diferente de _id
   const idFerramenta = req.params.id;
-  Ferramenta.findOne({id: idFerramenta}, (err, ferramenta) => {
-    if(!err) {
+  Ferramenta.findOne({ id: idFerramenta }, (err, ferramenta) => {
+    if (!err) {
       res.send(ferramenta)
     } else {
       res.sendStatus(404);
     }
   })
 })
-
-// tela de aprovação
-router.get('/links', (req, res) => {
-  Ferramenta.find({}, (err, ferramentas) => {
-    if(!err) res.send(ferramentas);
-  }).sort({date: 'desc'});
-});
 
 module.exports = router;

@@ -23,7 +23,8 @@ const FerramentaSchema = mongoose.Schema({
   },
   ciclos: {
     type: String,
-    required: true
+    default: 'todos',
+    enum: ['infantil', 'fundamental 1', 'fundamental 2', 'médio', 'superior', 'todos']
   },
   usuario: {
     type: String,
@@ -33,6 +34,11 @@ const FerramentaSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  status: {
+    type: String,
+    default: 'sugestão',
+    enum: ['aprovado', 'reprovado', 'sugestão']
+  }
 });
 
 module.exports = mongoose.model('Ferramenta', FerramentaSchema);

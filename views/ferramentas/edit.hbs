@@ -1,42 +1,74 @@
-<h3>Editar Ferramenta</h3>
+<h3>Edição de ferramenta</h3>
+<p>Altere os dados da ferramenta conforme necessário.</p>
 
-<form id="formulario-conteudo" action="/ferramentas/{{conteudo._id}}" method="POST">
+<form id="formulario-edicao-ferramenta" action="/ferramentas/{{ferramenta._id}}" method="POST">
   
   <!-- esconde o método http - method override -->
   <input type="hidden" name="_method" value="PUT">
   
-  <!-- título -->
-  <div class="form-group">
+  <!-- Identificador -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="id">Identificador</label>
+    <input type="text" class="form-control" id="id" name="id" aria-describedby="id-help" placeholder="id" value="{{ferramenta.id}}">
+    <small id="id-help" class="form-text text-muted">Identificador ferramenta</small>
+  </div>
+  
+  <!-- Nome -->
+  <div class="form-group" style="margin-bottom: 20px;">
     <label for="nome">Nome</label>
     <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome" value="{{ferramenta.nome}}">
-    <small id="titulo-help" class="form-text text-muted">Insira o nome da ferramenta.</small>
+    <small id="nome-help" class="form-text text-muted">Nome da ferramenta</small>
   </div>
 
-  <!-- status -->
-  <div class="form-group">
-    <label for="nome">Nome</label>
-    <select id="nome" class="form-select" name="nome" aria-label="Default select example">
-      {{#select conteudo.status}}
-        <option value="Rascunho" selected>Rascunho</option>
-        <option value="Público">Público</option>\
+  <!-- URL -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="url">Link de Acesso</label>
+    <input type="text" class="form-control" id="url" name="url" aria-describedby="url-help" placeholder="url" value="{{ferramenta.url}}">
+    <small id="url-help" class="form-text text-muted">Link de acesso para a ferramenta</small>
+  </div>
+
+  <!-- Descrição -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="descricao">Descrição</label>
+    <input type="text" class="form-control" id="descricao" name="descricao" aria-describedby="descricao-help" placeholder="descricao" value="{{ferramenta.descricao}}">
+    <small id="descricao-help" class="form-text text-muted">Uma breve descrição do que faz a ferramenta</small>
+  </div>
+
+   <!-- Status -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="status">Status</label>
+    <select id="status" class="form-select" name="status" aria-describedby="status-help" placeholder="status">
+      {{#select ferramenta.status}}
+        <option value="sugestão">sugestão</option>
+        <option value="aprovado">aprovado</option>
+        <option value="reprovado">reprovado</option>
       {{/select}}
     </select>
-    <small id="status-help" class="form-text text-muted">rascunho = privado.</small>
+    <small id="status-help" class="form-text text-muted">Status da ferramenta</small>
   </div>
 
-  <!-- título -->
-  <div class="form-group">
-    <label for="titulo">Título</label>
-    <input type="text" class="form-control" id="titulo" name="titulo" aria-describedby="titulo-help" placeholder="título" value="{{conteudo.titulo}}">
-    <small id="titulo-help" class="form-text text-muted">Insira qual será o conceito tratado neste registro.</small>
+   <!-- Ciclos -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="ciclos">Ciclo</label>
+    <select id="ciclos" class="form-select" name="ciclos" aria-describedby="ciclos-help" placeholder="ciclos">
+      {{#select ferramenta.ciclos}}
+        <option value="todos">Todos</option>
+        <option value="fundamental 1">Fundamental 1</option>
+        <option value="fundamental 2">Fundamental 2</option>
+        <option value="médio">Ensino Médio</option>
+        <option value="superior">Ensino Superior</option>
+      {{/select}}
+    </select>
+    <small id="status-help" class="form-text text-muted">Melhor ciclo de uso da ferramenta</small>
   </div>
 
-  <!-- corpo -->
-  <div class="form-group">
-    <label for="corpo">Corpo</label>
-    <textarea id="corpo" name="corpo">{{conteudo.corpo}}</textarea>
+  <!-- Vídeo -->
+  <div class="form-group" style="margin-bottom: 20px;">
+    <label for="video">Vídeo</label>
+    <input type="text" class="form-control" id="video" name="video" aria-describedby="video-help" placeholder="video" value="{{ferramenta.video}}"> 
+    <small id="video-help" class="form-text text-muted">Vídeo de apresentação da ferramenta (Youtube)</small>
   </div>
 
-  <button type="submit" class="btn btn-primary">Enviar!</button>
+  <button type="submit" class="btn btn-primary">Atualizar</button>
 
 </form>

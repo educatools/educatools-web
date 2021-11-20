@@ -145,19 +145,20 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         return ciclos.get(this.ciclos);
     };
 
+    //FIXME: colocar o restante das badges
     this.__montaBadges = function() {
-        const badges = new Map();
-        badges.set('Infantil', { texto: 'Infantil', tipo: 'success' });
-        badges.set('Ensino Fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
-        badges.set('Ensino Fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
-        badges.set('Ensino Fundamental', { texto: 'Ensino Fundamental', tipo: 'warning' });
-        badges.set('Todos', { texto: 'Todos', tipo: 'info' });
+        // const badges = new Map();
+        // badges.set('Infantil', { texto: 'Infantil', tipo: 'success' });
+        // badges.set('Ensino Fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
+        // badges.set('Ensino Fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
+        // badges.set('Ensino Fundamental', { texto: 'Ensino Fundamental', tipo: 'warning' });
+        // badges.set('Todos', { texto: 'Todos', tipo: 'info' });
 
-        //TODO: colocar o restante das badges
 
-        const { texto, tipo } = badges.get(this.ciclos);
+        // const { texto, tipo } = badges.get(this.ciclos);
 
-        return `<span class="badge badge-${tipo}" title="${this.ciclos}">${texto}</span>`
+        // return `<span class="badge badge-${tipo}" title="${this.ciclos}">${texto}</span>`
+        return '';
     };
 }
 
