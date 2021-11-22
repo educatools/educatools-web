@@ -18,7 +18,7 @@ const GerenciadorUsuarios = {
       const senha = process.env.ADMIN_SENHA || "admin";
       const tipo = "admin";
 
-      await this.criaUsuarioAdministrador(nome, email, tipo, senha);
+      await this.criaUsuario(nome, email, tipo, senha);
 
     }
 
