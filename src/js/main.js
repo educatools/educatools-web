@@ -134,13 +134,12 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
 
     this.__montaCategoriaClasse = function() {
         const ciclos = new Map();
-        ciclos.set('Infantil', 'infantil');
-        ciclos.set('Ensino Fundamental 1', 'ef1');
-        ciclos.set('Ensino Fundamental 2', 'ef2');
-        ciclos.set('Ensino Fundamental', 'ef');
-        ciclos.set('Ensino Médio', 'em');
-        ciclos.set('Ensino Superior', 'es');
-        ciclos.set('Todos', 'todos');
+        ciclos.set('infantil', 'infantil');
+        ciclos.set('fundamental 1', 'fundamental-1');
+        ciclos.set('fundamental 2', 'fundamental-2');
+        ciclos.set('médio', 'médio');
+        ciclos.set('superior', 'superior');
+        ciclos.set('todos', 'todos');
 
         return ciclos.get(this.ciclos);
     };
