@@ -6,42 +6,41 @@
   </ol>
 </nav>
 
-<h1>Criação de usuário</h1>
-<p>Preencha os dados abaixo para criar um novo usuário.</p>
+<main>
+    <section class="text-center container">
+        <div class="col-lg-6 col-md-8 mx-auto container_box">
+          <p>Preencha os dados abaixo para criar um novo usuário.</p>
+          <form id="formulario-usuario" action="/usuarios" method="POST">
+            <!-- Nome -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="nome">Nome</label>
+              <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome">
+              <small id="nome-help" class="form-text text-muted">Nome completo</small>
+            </div>
+            <!-- E-mail -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="email">E-mail</label>
+              <input type="text" class="form-control" id="email" name="email" aria-describedby="email-help" placeholder="email">
+              <small id="email-help" class="form-text text-muted">E-mail</small>
+            </div>
+            <!-- Tipo -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="tipo">Tipo de usuário</label>
+              <select id="tipo" class="form-select" name="tipo">
+                <option value="usuario" selected>usuário</option>
+                <option value="admin" selected>admin</option>
+              </select>
+            </div>
+            <!-- Senha -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="senha">Senha</label>
+              <input type="password" class="form-control" id="senha" name="senha" aria-describedby="senha-help" placeholder="senha">
+              <small id="senha-help" class="form-text text-muted">Senha provisória do usuário</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+    </section>
+</main>
 
-<form id="formulario-usuario" action="/usuarios" method="POST">
-
-  <!-- Nome -->
-  <div class="form-group" style="margin-bottom: 20px;">
-    <label for="nome">Nome</label>
-    <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome">
-    <small id="nome-help" class="form-text text-muted">Nome completo</small>
-  </div>
-
-
-  <!-- E-mail -->
-  <div class="form-group" style="margin-bottom: 20px;">
-    <label for="email">E-mail</label>
-    <input type="text" class="form-control" id="email" name="email" aria-describedby="email-help" placeholder="email">
-    <small id="email-help" class="form-text text-muted">E-mail</small>
-  </div>
-
-  <!-- Tipo -->
-  <div class="form-group" style="margin-bottom: 20px;">
-    <label for="tipo">Tipo de usuário</label>
-    <select id="tipo" class="form-select" name="tipo">
-      <option value="usuario" selected>usuário</option>
-      <option value="admin" selected>admin</option>
-    </select>
-  </div>
-
-  <!-- Senha -->
-  <div class="form-group" style="margin-bottom: 20px;">
-    <label for="senha">Senha</label>
-    <input type="password" class="form-control" id="senha" name="senha" aria-describedby="senha-help" placeholder="senha">
-    <small id="senha-help" class="form-text text-muted">Senha provisória do usuário</small>
-  </div>
-
-  <button type="submit" class="btn btn-primary">Enviar</button>
-
-</form>
+  

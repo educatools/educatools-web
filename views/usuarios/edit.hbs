@@ -6,49 +6,45 @@
   </ol>
 </nav>
 
-<div class="consult_registration">
-    <div class="box">
-        <div class="informe-dados">
-            <h4>Altere os dados:</h4>
+<main>
+    <section class="py-2 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto container_box">
+            <p>Altere os dados:</p>
+            <form id="form-edicao-usuarios" action="/usuarios/{{usuarios._id}}" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" name="nome" value="{{usuarios.nome}}">
+                </div>
+                <div class="form-group">
+                    <label for="cpf">CPF</label>
+                    <input type="text" name="cpf" value="{{usuarios.cpf}}">
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" class="form-select" name="tipo">
+                    {{#select usuarios.tipo}}
+                        <option value="tutor">tutor</option>
+                        <option value="colaborador">colaborador</option>
+                        <option value="admin">admin</option>
+                    {{/select}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="{{usuarios.email}}">
+                </div>
+                <div class="buttons">
+                    <button type="submit">Salvar</button>
+                </div>
+            </form>
         </div>
-        <form id="form-edicao-usuarios" action="/usuarios/{{usuarios._id}}" method="POST">
-            <input type="hidden" name="_method" value="PUT">
-            
-            <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" value="{{usuarios.nome}}">
-            </div>
+      </div>
+    </section>
+</main>
 
-            <div class="form-group">
-                <label for="cpf">CPF</label>
-                <input type="text" name="cpf" value="{{usuarios.cpf}}">
-            </div>
 
-            <div class="form-group">
-                <label for="tipo">Tipo</label>
-                <select id="tipo" class="form-select" name="tipo">
-                {{#select usuarios.tipo}}
-                    <option value="tutor">tutor</option>
-                    <option value="colaborador">colaborador</option>
-                    <option value="admin">admin</option>
-                {{/select}}
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" name="email" value="{{usuarios.email}}">
-            </div>
-
-            {{!-- <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="text" name="senha" value="{{usuarios.senha}}">
-            </div> --}}
-
-            <div class="buttons">
-                <button type="submit">Salvar</button>
-            </div>
-            
-        </form>
-    </div>
-</div>
+        
+        

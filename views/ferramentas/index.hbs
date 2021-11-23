@@ -5,45 +5,52 @@
   </ol>
 </nav>
 
-<h1>Ferramentas</h1>
-<p>Estas são as ferramentas cadastradas.</p>
-{{#if ferramentas}}
-<table class="table striped align-middle">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Usuário</th>
-            <th>Criado em</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each ferramentas}}
-        <tr>
-            <td>{{nome}}</td>
-            <td><span class="dash-status">{{descricao}}</span></td>
-            <td><span class="dash-status">{{usuario}}</span></td>
-            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
+<main>
+    <section class="text-center container">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 mx-auto container_box">
+            <p>Estas são as ferramentas cadastradas.</p>
+            {{#if ferramentas}}
+                <table class="table striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Usuário</th>
+                            <th>Criado em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each ferramentas}}
+                        <tr>
+                            <td>{{nome}}</td>
+                            <td><span class="dash-status">{{descricao}}</span></td>
+                            <td><span class="dash-status">{{usuario}}</span></td>
+                            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
 
-            <td>
-                <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <form action="/ferramentas/{{_id}}" method="POST" id="delete-form">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn red">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-{{else}}
-    <p>Não há ferramentas cadastradas.</p>
-{{/if}}
+                            <td>
+                                <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="/ferramentas/{{_id}}" method="POST" id="delete-form">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn red">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{else}}
+                <p>Não há ferramentas cadastradas.</p>
+            {{/if}}
+        </div>
+      </div>
+    </section>
+</main>
 
 <a href="/ferramentas/add" class="add-btn-float">
     <i class="fa fa-plus fbtn-float"></i>
