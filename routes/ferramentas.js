@@ -48,9 +48,11 @@ router.get('/all', (req, res) => {
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
-router.post('/', (request, response) => {
-  const { id, usuario, nome, url, ciclos, descricao, video } = request.body;
-  console.log("request-body", request.body);
+router.post('/', (req, res) => {
+  const { id, nome, url, ciclos, descricao, video } = req.body;
+  const usuario = req.user.nome;
+
+  console.log("request-body", req.body);
 
   const ferramenta = new Ferramenta({
     id,
@@ -68,7 +70,7 @@ router.post('/', (request, response) => {
       console.error('Ocorreu um erro ao tentar gravar o registro no banco de dados.');
       console.error(err);
 
-      response.sendStatus(500);
+      res.sendStatus(500);
     }
     else {
       res.redirect('/ferramentas');

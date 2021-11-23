@@ -9,9 +9,12 @@
         <div class="col-sm-4 offset-md-1 py-4">
           <h4 class="text-white">Links</h4>
           <ul class="list-unstyled">
-            <li><a href="/" class="text-white">Home</a></li>
-            <li><a target="_blank" href="https://www.youtube.com/channel/UCCKZ_6pC-Vgp4lF5-SuaCWQ" class="text-white">Canal no Youtube</a></li>
-            <li><a href="/dashboard" class="text-white">Minha área</a></li>
+            <li><i class="fas fa-home text-white"></i> <a href="/" class="text-white">Home</a></li>
+            <li><i class="fab fa-youtube text-white"></i></i> <a target="_blank" href="https://www.youtube.com/channel/UCNSzrPZCj5wyvISx6mjtCgQ" class="text-white">Canal no Youtube</a></li>
+            <li><i class="fas fa-user text-white"></i> <a href="/dashboard" class="text-white">Minha área</a></li>
+            {{#if user}}
+              <li><i class="fas fa-sign-out-alt text-white"></i> <a href="/login/out" class="text-white">Logout</a></li>
+            {{/if}}
           </ul>
         </div>
       </div>

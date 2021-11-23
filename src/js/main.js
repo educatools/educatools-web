@@ -114,9 +114,7 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
             <div class="card-body">
-              <h5 class="card-title">
-                <img src="${favicon}" style="padding-bottom: 5px;" width="25px"/>&nbsp ${this.nome}
-              </h5>
+              <h5 class="card-title">${this.nome}</h5>
               <p class="card-text">${this.descricao}</p>
               <div class="d-flex justify-content-center align-items-center">
                 <div class="flex-grow-1">
@@ -144,20 +142,17 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         return ciclos.get(this.ciclos);
     };
 
-    //FIXME: colocar o restante das badges
     this.__montaBadges = function() {
-        // const badges = new Map();
-        // badges.set('Infantil', { texto: 'Infantil', tipo: 'success' });
-        // badges.set('Ensino Fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
-        // badges.set('Ensino Fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
-        // badges.set('Ensino Fundamental', { texto: 'Ensino Fundamental', tipo: 'warning' });
-        // badges.set('Todos', { texto: 'Todos', tipo: 'info' });
+        const badges = new Map();
+        badges.set('infantil', { texto: 'Infantil', tipo: 'success' });
+        badges.set('fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
+        badges.set('fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
+        badges.set('médio', { texto: 'Ensino Fundamental', tipo: 'warning' });
+        badges.set('superior', { texto: 'Ensino Fundamental', tipo: 'secondary' });
+        badges.set('todos', { texto: 'Todos', tipo: 'info' });
 
-
-        // const { texto, tipo } = badges.get(this.ciclos);
-
-        // return `<span class="badge badge-${tipo}" title="${this.ciclos}">${texto}</span>`
-        return '';
+        const { texto, tipo } = badges.get(this.ciclos);
+        return `<span class="badge bg-${tipo}" title="${this.ciclos}">${texto}</span>`;
     };
 }
 
@@ -185,37 +180,3 @@ if ($(".filter-button").removeClass("active")) {
     $(this).removeClass("active");
 }
 $(this).addClass("active");
-
-
-
-// TODO: Códigos referente ao botão de recomendação de ferramentas
-document.getElementById("btnSendRecommendation").addEventListener("click", (event) => {
-    event.preventDefault();
-    salvarRecomencadaoFerramenta();
-});
-
-function salvarRecomencadaoFerramenta() {
-    const data = {
-        id: $("#modal-recomendacao-ferramenta-id")[0].value,
-        url: $("#modal-recomendacao-ferramenta-usuario")[0].value,
-        nome: $("#modal-recomendacao-ferramenta-nome")[0].value,
-        url: $("#modal-recomendacao-ferramenta-url")[0].value,
-        ciclos: $("#modal-recomendacao-ferramenta-ciclos")[0].value,
-        descricao: $("#modal-recomendacao-ferramenta-descricao")[0].value,
-        video: $("#modal-recomendacao-ferramenta-video")[0].value,
-        date: new Date()
-    };
-
-    $.post({
-        data,
-        url: `${URL_API}/ferramentas/salvar`,
-        success: () => {
-            $('#modalRecomendacao').modal('hide');
-            alert('Sua recomendação foi enviada!');
-        },
-        error: (err) => {
-            console.error("err", err);
-            alert('Ocorreu um erro! =(');
-        }
-    });
-}

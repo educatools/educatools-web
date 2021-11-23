@@ -1,87 +1,6 @@
 <main role="main">
-  <!-- Modal de recomendação -->
-  <div id="modalRecomendacao" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRecomendacao"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Recomendar site ou ferramenta</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Preencha os campos abaixos para recomendar um site ou ferramenta que você conheça.</p>
-
-          <!-- Formulário de recomendação de ferramenta -->
-          <form id="recommendationForm" name="sugestaoForm">
-            
-            <!-- id -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-id">Identificador</label>
-              <input name="identificador" type="text" class="form-control" id="modal-recomendacao-ferramenta-id" aria-describedby="identificador único"
-                placeholder="Digite um identificador para esta ferramenta">
-            </div>
-            
-            <!-- usuario -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-usuario">Usuário</label>
-              <input name="usuario" type="text" class="form-control" id="modal-recomendacao-ferramenta-usuario" aria-describedby="usuário"
-                placeholder="nome de usuário">
-            </div>
-
-            <!-- nome da ferramenta/site -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-nome">Nome da ferramenta ou site</label>
-              <input name="nome" type="text" class="form-control" id="modal-recomendacao-ferramenta-nome"
-                placeholder="Nome da ferramenta ou site">
-            </div>
-
-            <!-- url -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-url">Url (Link)</label>
-              <input name="url" type="text" class="form-control" id="modal-recomendacao-ferramenta-url"
-                placeholder="Link da ferramenta">
-            </div>
-
-            <!-- ciclos -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-ciclos">Ideal para...</label>
-              <select name="ciclos" class="form-control" id="modal-recomendacao-ferramenta-ciclos">
-                <option value="Infantil">Infantil</option>
-                <option value="Ensino Fundamental 1">Ensino Fundamental 1</option>
-                <option value="Ensino Fundamental 2">Ensino Fundamental 2</option>
-                <option value="Ensino Fundamental">Ensino Fundamental (1 e 2)</option>
-                <option value="Ensino Médio">Ensino Médio</option>
-                <option value="Ensino Superior">Ensino Superior</option>
-                <option value="Todos">Todos</option>
-              </select>
-            </div>
-
-            <!-- descrição -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-descricao">O que faz?</label>
-              <textarea name="descricao" class="form-control" id="modal-recomendacao-ferramenta-descricao" rows="3"
-                placeholder="Plataforma de jogos educacionais sobre matemática..."></textarea>
-            </div>
-
-            <!-- video -->
-            <div class="form-group">
-              <label for="modal-recomendacao-ferramenta-video">Vídeo no Youtube</label>
-              <input name="video" type="text" class="form-control" id="modal-recomendacao-ferramenta-video"
-                placeholder="URL vídeo no youtube">
-            </div>
-
-            <!-- botao -->
-            <button id="btnSendRecommendation" type="submit" class="btn btn-primary">Enviar recomendação</button>
-          </form>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- modal da ferramenta -->
+  
+  <!-- Modal da ferramenta -->
   <div id="modalFerramenta" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
     aria-labelledby="modalFerramenta" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -115,19 +34,8 @@
         <input id="searchbox" class="form-control" type="text" placeholder="Eu procuro por..."
           aria-label="Eu procuro por...">
       </div>
-      {{!-- <button type="button" class="btn btn-success my-2" data-bs-toggle="modal" data-bs-target="#modalRecomendacao">
-        Quero sugerir uma ferramenta!
-      </button> --}}
-      <br />
-      <!--
-        <button type="button" onClick="alert('Ops! Essa funcionalidade ainda não está pronta =P')" class="btn btn-info my-2">
-          Baixar extensão para Google Chrome
-        </button>
-        -->
     </div>
     <div>
-      <br /><br />
-      <p>Filtros</p>
       <button type="button" class="btn btn-light btn-sm my-2 filter-button" data-filter="all">Todos</button>
       <button type="button" class="btn btn-success btn-sm my-2 filter-button" data-filter="infantil">Infantil</button>
       <button type="button" class="btn btn-primary btn-sm my-2 filter-button" data-filter="fundamental-1">Ensino Fundamental
