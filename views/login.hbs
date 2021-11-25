@@ -1,10 +1,99 @@
-<h3><i class="fas fa-book-reader"></i> EducaTools</h3>
-<div class="section">
-  <p class="lead">Ferramentas virtuais para professores e professoras.</p>
-</div>
-<div class="divider"></div>
-<div class="section">
-  <a href="/auth/google" class="btn red darken-1">
-    <i class="fab fa-google left"></i> Log In With Google
-  </a>
-</div>
+<main>
+  <section class="py-2 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto container_box">
+        <!-- listagem de abas disponíveis -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+              role="tab" aria-controls="home" aria-selected="true">Login</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+              role="tab" aria-controls="profile" aria-selected="false">Registrar</button>
+          </li>
+        </ul>
+
+        <!-- conteúdos das abas -->
+        <div class="tab-content py-5" id="myTabContent">
+
+          <!-- login -->
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <form id="formulario-registro" action="/login" method="POST">
+              <div class="mb-3">
+                <label for="formulario-registro_email" class="form-label">E-mail</label>
+                <input name="email" type="text" class="form-control" id="formulario-registro_email"
+                  aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">Insira o seu endereço de e-mail.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formulario-registro_senha" class="form-label">Senha</label>
+                <input name="senha" type="password" class="form-control" id="formulario-registro_senha"
+                  aria-describedby="senhaHelp">
+                <div id="senhaHelp" class="form-text">Insira sua senha</div>
+              </div>
+              <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+          </div>
+
+          <!-- cadastro -->
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <form id="formulario-cadastro">
+                <!-- nome -->
+                <div class="mb-3">
+                  <label for="formulario-cadastro_nome" class="form-label">Nome</label>
+                  <input name="nome" type="text" class="form-control" id="formulario-cadastro_nome"
+                    aria-describedby="nomeHelp">
+                  <div id="nomeHelp" class="form-text">Insira o seu nome completo.</div>
+                </div>
+                <!-- e-mail -->
+                <div class="mb-3">
+                  <label for="formulario-cadastro_email" class="form-label">E-mail</label>
+                  <input name="email" type="text" class="form-control" id="formulario-cadastro_email"
+                    aria-describedby="emailHelp">
+                  <div id="emailHelp" class="form-text">Insira o seu endereço de e-mail.</div>
+                </div>
+                <!-- senha -->
+                <div class="mb-3">
+                  <label for="formulario-cadastro_senha" class="form-label">Senha</label>
+                  <input name="senha" type="password" class="form-control" id="formulario-cadastro_senha"
+                    aria-describedby="senhaHelp">
+                  <div id="senhaHelp" class="form-text">Insira sua senha</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  window.onload = () => {
+
+    // tratamento formulário de cadastro
+    $('#formulario-cadastro').submit(function (evt) {
+      evt.preventDefault();
+
+      const nome = document.getElementById("formulario-cadastro_nome").value;
+      //TODO: checar se e-mail já está cadastrado no banco e avisar o usuário
+      const email = document.getElementById("formulario-cadastro_email").value;
+      const senha = document.getElementById("formulario-cadastro_senha").value;
+
+      $.post('/login/criar', {
+        nome, email, senha
+      }, (data, status) => {
+        console.log("status", status);
+        console.log("data", data);
+      })
+
+    });
+
+  }
+</script>

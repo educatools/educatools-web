@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuth, ensureGuest } = require('../middleware/auth');
 
-const Story = require('../modelos/Story');
-
 router.get('/', (req, res) => {
   res.render('layouts/principal');
 })
