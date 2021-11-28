@@ -40,7 +40,32 @@ const GerenciadorUsuarios = {
       });
     });
 
+  },
+
+
+  async alteraUsuario(id, nome, email, tipo) {
+    try {
+      let usuario = await Usuario.findById(id);
+      if(!usuario) throw new Error("Usuário não encontrado para fazer update");
+
+      const filtro = {_id: id};
+      const update = {nome, email, tipo};
+      const opcoes = {
+        new: true,
+        runValidators: true,
+      };
+
+      usuario = await Usuario.findOneAndUpdate(filtro, update , opcoes);
+
+      return usuario;
+
+    } catch(err) {
+      console.log(err);
+      throw new Error();
+    }
   }
+
+
 }
 
 module.exports = GerenciadorUsuarios;
