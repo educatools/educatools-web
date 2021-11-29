@@ -10,6 +10,7 @@
 
 const dbHandler = require('./BancoDeDadosTest');
 const GerenciadorUsuarios = require("../servicos/GerenciadorUsuarios");
+const { TestWatcher } = require('@jest/core');
 
 /** Configuração do Banco de dados em memória */
 beforeAll(async() => await dbHandler.connect());
@@ -37,3 +38,27 @@ test('Altera dados de um usuário', async () => {
   expect(usuario.senha).not.toBe("teste");
 
 });
+
+test('Deleta um usuário', async () => {
+  const {_id} = await GerenciadorUsuarios.criaUsuario("teste", "teste@gmail.com", "usuario", "teste");
+  await GerenciadorUsuarios.deletaUsuario(_id);
+  const usuario = await GerenciadorUsuarios.recuperaUsuarioPorId(_id);
+  expect(usuario).toBeNull();
+});
+
+test('Recupera um usuário por id', async () => {
+  const {_id} = await GerenciadorUsuarios.criaUsuario("teste", "teste@gmail.com", "usuario", "teste");
+  const usuario = await GerenciadorUsuarios.recuperaUsuarioPorId(_id);
+  expect(usuario).not.toBeNull();
+  expect(usuario._id).toStrictEqual(_id);
+});
+
+test('Recupera todos os usuários', async () => {
+  await GerenciadorUsuarios.criaUsuario("teste", "teste@gmail.com", "usuario", "teste");
+  await GerenciadorUsuarios.criaUsuario("teste2", "teste2@gmail.com", "usuario", "teste2");
+
+  const usuarios = await GerenciadorUsuarios.recuperaTodosUsuarios();
+  expect(usuarios.length).toBe(2);
+});
+
+
