@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const GerenciadorSenhas = require("../servicos/GerenciadorSenhas");
 const Usuario = require('../modelos/Usuario');
 
 const GerenciadorUsuarios = {
@@ -27,27 +27,22 @@ const GerenciadorUsuarios = {
   async criaUsuario(nome, email, tipo, senha) {
 
     const usuario = new Usuario({tipo, email, nome, senha});
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(usuario.senha, salt, (err, hash) => {
-        if (err) throw err;
-        usuario.senha = hash;
-        usuario
-          .save()
-          .then(usuario => {
-            console.log("usuário criado com sucesso", usuario);
-          })
-          .catch(err => console.log(err));
-      });
-    });
+    const conjuntoSalt = await GerenciadorSenhas.genSalt(senha);
+    const conjuntoHash = await GerenciadorSenhas.genHash(conjuntoSalt.salt, conjuntoSalt.password);
 
+    usuario.senha = conjuntoHash.hash;
+    
+    try{
+      const novoUsuario = await usuario.save();
+      return novoUsuario;
+    } catch (err) {
+      console.log("Erro ao criar usuário", err);
+    }
   },
 
 
   async alteraUsuario(id, nome, email, tipo) {
     try {
-      let usuario = await Usuario.findById(id);
-      if(!usuario) throw new Error("Usuário não encontrado para fazer update");
-
       const filtro = {_id: id};
       const update = {nome, email, tipo};
       const opcoes = {
@@ -55,9 +50,8 @@ const GerenciadorUsuarios = {
         runValidators: true,
       };
 
-      usuario = await Usuario.findOneAndUpdate(filtro, update , opcoes);
-
-      return usuario;
+      const usuarioAlterado = await Usuario.findOneAndUpdate(filtro, update , opcoes);
+      return usuarioAlterado;
 
     } catch(err) {
       console.log(err);
