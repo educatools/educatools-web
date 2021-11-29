@@ -2,13 +2,19 @@ const express = require('express');
 const router = express.Router()
 const { ensureAuth } = require('../middleware/auth');
 
+const GerenciadorFerramentas = require("../servicos/GerenciadorFerramentas");
 const Ferramenta = require('../modelos/Ferramenta');
 
 router.get('/', ensureAuth, async (req, res) => {
-  const ferramentas = await Ferramenta.find({}).lean();
-  res.render('ferramentas/index', {
-    ferramentas
-  });
+  try {
+    const ferramentas = await GerenciadorFerramentas.recuperaTodasFerramentas();
+    res.render('ferramentas/index', {
+      ferramentas
+    });
+  } catch(err) {
+    console.log(err);
+    res.render('error/500')
+  }
 });
 
 router.get('/add', ensureAuth, async (req, res) => {
@@ -16,21 +22,20 @@ router.get('/add', ensureAuth, async (req, res) => {
 })
 
 router.get('/edit/:id', async (req, res) => {
+  const id = req.params.id;
   try {
-    const ferramenta = await Ferramenta.findOne({
-      _id: req.params.id,
-    }).lean()
-
+    const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(id);
+    
     if (!ferramenta) {
-      return res.render('error/404');
+      res.render('error/404');
     }
 
     res.render('ferramentas/edit', {
       ferramenta
     });
   } catch (err) {
-    console.error(err)
-    return res.render('error/500')
+    console.error(err);
+    res.render('error/500');
   }
 });
 
@@ -48,34 +53,16 @@ router.get('/all', (req, res) => {
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
-router.post('/', (req, res) => {
-  const { id, nome, url, ciclos, descricao, video } = req.body;
+router.post('/', async (req, res) => {
   const usuario = req.user.nome;
-
-  console.log("request-body", req.body);
-
-  const ferramenta = new Ferramenta({
-    id,
-    url,
-    usuario,
-    data: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-    nome,
-    descricao,
-    ciclos,
-    video
-  });
-
-  ferramenta.save(err => {
-    if (err) {
-      console.error('Ocorreu um erro ao tentar gravar o registro no banco de dados.');
-      console.error(err);
-
-      res.sendStatus(500);
-    }
-    else {
-      res.redirect('/ferramentas');
-    }
-  })
+  const { id, nome, url, ciclos, descricao, video } = req.body;
+  try {
+    await GerenciadorFerramentas.criaFerramenta(id, url, usuario, nome, descricao, ciclos, video);
+    res.redirect('/ferramentas');
+  } catch(err) {
+    console.error(err);
+    return res.render('error/500');
+  }
 });
 
 router.put('/:id', async (req, res) => {
