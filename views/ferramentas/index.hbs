@@ -11,7 +11,7 @@
         <div class="col-lg-6 col-md-8 mx-auto container_box">
             <p>Estas são as ferramentas cadastradas.</p>
             {{#if ferramentas}}
-                <table class="table striped align-middle">
+                <table class="table striped align-middle table-responsive">
                     <thead>
                         <tr>
                             <th>Nome</th>
@@ -29,7 +29,7 @@
                             <td><span class="dash-status">{{usuario}}</span></td>
                             <td>{{formatDate data 'DD/MM/yyyy'}}</td>
 
-                            <td>
+                            <td class="flex-buttons">
                                 <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
                                     <i class="fas fa-edit"></i>
                                 </a>

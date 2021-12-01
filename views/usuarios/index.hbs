@@ -8,12 +8,12 @@
 
 <main>
     <section class="py-2 text-center container">
-        <div class="row py-lg-5">
+        <div class="row">
             <div class="col-lg-6 col-md-8 mx-auto container_box">
                 <p>Estes são os usuários cadastrados.</p>
-                <div id="tabelaUsuarios">
+                <div id="tabelaUsuarios ">
                     {{#if usuarios}}
-                    <table class="table striped align-middle">
+                    <table class="table striped align-middle table-responsive">
                         <thead>
                             <tr>
                                 <th>Nome completo</th>
@@ -31,7 +31,7 @@
                                 <td><span class="dash-status">{{tipo}}</span></td>
                                 <td>{{formatDate criadoEm 'DD/MM/yyyy'}}</td>
 
-                                <td>
+                                <td class="flex-buttons">
                                     <a href="/usuarios/edit/{{_id}}" class="btn btn-float">
                                         <i class="fas fa-edit"></i>
                                     </a>

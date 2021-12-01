@@ -1,4 +1,5 @@
 @import 'colors.less';
+@import 'tabela.less';
 
 body {
   // background-image: url(../assets/bg.png);
@@ -109,10 +110,9 @@ a.custom-card:hover {
 
 .container_box {
   background-color: @color-white;
-  width: 40em;
+  width: 100%;
   height: auto;
   padding: 1em;
-  margin: 2em;
   border-radius: 1em;
   -webkit-box-shadow: 5px 5px 32px -9px rgba(0,0,0,0.75);
   -moz-box-shadow: 5px 5px 32px -9px rgba(0,0,0,0.75);
@@ -129,11 +129,21 @@ a.custom-card:hover {
   flex-wrap: wrap;
   flex-direction: row;
   .btn-menu {
-    width: 15em;
+    width: 16em;
+    height: 5em;
     margin: 0 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .7em;
     a {
       text-decoration: none;
       color: @color-white;
+      font-size: 1.2em;
+    }
+    i {
+      font-size: 1.8em;
+      margin-right: 0.4em;
     }
   }
 

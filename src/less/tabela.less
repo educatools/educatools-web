@@ -1,0 +1,90 @@
+@import 'colors.less';
+
+table {
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 20px;
+    .th,
+    .td {
+        border: @color-grey solid 1px;
+        font-size: 12px;
+        padding: 8px;
+        line-height: 20px;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .flex-buttons {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+    .td:last-child {
+        border-right: 0;
+    }
+    thead {
+        th {
+            text-align: center;
+            padding: .7em;
+        }
+    }
+    tbody > tr:nth-child(odd) > td,
+    tbody > tr:nth-child(odd) > th {
+    //   background-color: #bacbe2;
+    }
+    tbody {
+        overflow-y: hidden;
+        td {
+            text-align: center;
+            padding: .7em;
+            &.lastCol {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 2.3em;
+                button {
+                    border: none;
+                    background-color: transparent;
+                }
+                i {
+                    margin: .3em;
+                    color: @color-black;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 850px) {
+    .table-responsive {
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+    .table-responsive thead,
+    .table-responsive tbody,
+    .table-responsive th,
+    .table-responsive td,
+    .table-responsive tr {
+        display: block;
+    }
+    .table-responsive td,
+    .table-responsive th {
+        height: 35px;
+    }
+    .table-responsive thead {
+        float: left;
+    }
+    .table-responsive tbody {
+        width: auto;
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+    .table-responsive tbody tr {
+        display: inline-block;
+    }
+}
