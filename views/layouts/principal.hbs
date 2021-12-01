@@ -10,16 +10,24 @@
           <button id="btn-fecharvideo" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <div class="mb-3" id="modal-ferramenta-descricao">
+            <h5><i class="far fa-clipboard"></i> Descrição</h5>
+            <p>-</p>
+          </div>
+          <div class="mb-3" id="modal-ferramenta-video">
+            <h5><i class="far fa-question-circle"></i> Como usar?</h5>
+          </div>
           <div class="mb-3">
             <iframe id="modal-ferramenta-iframe-youtube" width="560" height="315" src="https://www.youtube.com/embed/" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
-          <div class="mb-3" id="modal-ferramenta-descricao">
-            <h5>Descrição</h5><p>Descrição da ferramenta</p>
-          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <a id="modal-ferramenta-url" class="btn btn-primary" href="#" target="_blank" role="button">Acessar</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Fechar
+          </button>
+          <a id="modal-ferramenta-url" class="btn btn-primary" href="#" target="_blank" role="button">
+            <i class="fas fa-arrow-right"></i> Acessar
+          </a>
         </div>
       </div>
     </div>

@@ -32,14 +32,13 @@ const GerenciadorUsuarios = {
 
     usuario.senha = conjuntoHash.hash;
     
-    try{
-      const novoUsuario = await usuario.save();
-      return novoUsuario;
+    try {
+     return await usuario.save();
     } catch (err) {
-      console.log("Erro ao criar usuário", err);
+      console.log(err);
+      throw new Error("Erro ao criar um novo usuário.");
     }
   },
-
 
   async alteraUsuario(id, nome, email, tipo) {
     try {
@@ -50,12 +49,43 @@ const GerenciadorUsuarios = {
         runValidators: true,
       };
 
-      const usuarioAlterado = await Usuario.findOneAndUpdate(filtro, update , opcoes);
-      return usuarioAlterado;
+      return await Usuario.findOneAndUpdate(filtro, update , opcoes);
 
     } catch(err) {
       console.log(err);
-      throw new Error();
+      throw new Error("Erro ao tentar alterar dados de um usuário.");
+    }
+  },
+
+  async deletaUsuario(id) {
+    try {
+      let usuario = await Usuario.findById(id);
+      if (!usuario) {
+        throw new Error("Não existe usuário com este id.");
+      }
+      await Usuario.remove({ _id: id });
+      return true;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Erro ao tentar deletar um usuário", err);
+    }
+  },
+
+  async recuperaUsuarioPorId(id) {
+    try {
+      return await Usuario.findOne({_id: id}).lean();
+    } catch (err) {
+      console.log(err);
+      throw new Error("Erro ao tentar recuperar usuário por id.");
+    }
+  },
+
+  async recuperaTodosUsuarios() {
+    try {
+        return await Usuario.find({}).lean();
+    } catch (err) {
+        console.error(err);
+        throw new Error("Erro ao tentar recuperar todos os usuários.");
     }
   }
 
