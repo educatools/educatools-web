@@ -8,9 +8,7 @@ const Ferramenta = require('../modelos/Ferramenta');
 router.get('/', ensureAuth, async (req, res) => {
   try {
     const ferramentas = await GerenciadorFerramentas.recuperaTodasFerramentas();
-    res.render('ferramentas/index', {
-      ferramentas
-    });
+    res.render('ferramentas/index', { ferramentas });
   } catch(err) {
     console.log(err);
     res.render('error/500')
@@ -67,25 +65,16 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    let ferramenta = await Ferramenta.findById(req.params.id).lean();
+    const id = req.params.id;
+    const { nome, url, descricao, status, ciclos, video } = req.body;
 
-    if (!ferramenta) {
-      return res.render('error/404')
-    }
-
-    ferramenta = await Ferramenta.findOneAndUpdate({
-      _id: req.params.id
-    },
-      req.body, {
-      new: true,
-      runValidators: true,
-    });
-
+    await GerenciadorFerramentas.alteraFerramenta(id, nome, url, descricao, status, ciclos, video);
+    
     res.redirect('/ferramentas');
 
   } catch (err) {
     console.error(err)
-    return res.render('error/500')
+    res.render('error/500');
   }
 });
 

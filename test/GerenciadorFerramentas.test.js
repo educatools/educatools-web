@@ -20,6 +20,25 @@ test('Cria uma nova ferramenta', async () => {
 
 });
 
+test("Altera dados de uma ferramenta", async () => {
+  const ferramenta = await GerenciadorFerramentas.criaFerramenta("Teste", "https://www.teste.com.br", "Teste", "Teste", "Teste", "todos", "vqJLRvk6_Xc");
+
+  const ferramentaAlterada = await GerenciadorFerramentas.alteraFerramenta(ferramenta._id, "Teste2", "https://www.teste2.com.br", "infantil", "Teste2", "aprovado", "vqJLRvk6_Xca");
+
+  expect(ferramentaAlterada).not.toBeNull();
+  const {nome, url, usuario, descricao, status, ciclos, video} = ferramentaAlterada;
+
+  expect(ferramentaAlterada._id).toStrictEqual(ferramenta._id);
+  expect(nome).toBe("Teste2");
+  expect(url).toBe("https://www.teste2.com.br");
+  expect(usuario).toBe("Teste"); // não foi alterado
+  expect(descricao).toBe("Teste2");
+  expect(status).toBe("aprovado");
+  expect(ciclos).toBe("infantil");
+  expect(video).toBe("vqJLRvk6_Xca");
+
+})
+
 test('Recupera todas as ferramentas', async () => {
   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
   await GerenciadorFerramentas.criaFerramenta("id2", "url2", "usuario2", "nome2", "descricao2", "todos", "video2");
@@ -34,3 +53,12 @@ test('Recupera uma ferramenta por id', async () => {
   expect(ferramenta).not.toBeNull();
   expect(ferramenta._id).toStrictEqual(_id);
 });
+
+test("Deleta uma ferramenta", async () => {
+  const {_id} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+
+  await GerenciadorFerramentas.deletaFerramenta(_id);
+  const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(_id);
+
+  expect(ferramenta).toBeNull();
+})
