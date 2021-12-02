@@ -80,11 +80,11 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-      await Ferramenta.remove({ _id: req.params.id });
+      await GerenciadorFerramentas.deletaFerramenta(req.params.id);
       res.redirect('/ferramentas');
   } catch (err) {
       console.error(err);
-      return res.render('error/500');
+      res.render('error/500');
   }
 })
 
