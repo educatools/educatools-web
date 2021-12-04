@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router()
-const { ensureAuth } = require('../middleware/auth');
+const { ensureAuth, ensureAdmin } = require('../middleware/auth');
 
 const GerenciadorFerramentas = require("../servicos/GerenciadorFerramentas");
 const Ferramenta = require('../modelos/Ferramenta');
 
-router.get('/', ensureAuth, async (req, res) => {
+router.get('/', ensureAdmin, async (req, res) => {
   try {
     const ferramentas = await GerenciadorFerramentas.recuperaTodasFerramentas();
     res.render('ferramentas/index', { ferramentas });
@@ -51,7 +51,7 @@ router.get('/all', (req, res) => {
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
-router.post('/', async (req, res) => {
+router.post('/', ensureAuth, async (req, res) => {
   const usuario = req.user.nome;
   const { id, nome, url, ciclos, descricao, video } = req.body;
   try {
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', ensureAdmin, async (req, res) => {
   try {
     const id = req.params.id;
     const { nome, url, descricao, status, ciclos, video } = req.body;
@@ -78,7 +78,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAdmin, async (req, res) => {
   try {
       await GerenciadorFerramentas.deletaFerramenta(req.params.id);
       res.redirect('/ferramentas');
@@ -90,6 +90,8 @@ router.delete('/:id', async (req, res) => {
 
 // @desc Retorna os dados de apenas uma ferramenta
 // @rota GET /ferramentas/:id
+
+// FIXME: remover ideia de id e fazer por nome (ou inventar um slug tipo o wordpress)
 router.get('/detalhes/:id', (req, res) => {
   // lembre-se: id é diferente de _id
   const idFerramenta = req.params.id;

@@ -23,16 +23,16 @@ test('Cria uma nova ferramenta', async () => {
 test("Altera dados de uma ferramenta", async () => {
   const ferramenta = await GerenciadorFerramentas.criaFerramenta("Teste", "https://www.teste.com.br", "Teste", "Teste", "Teste", "todos", "vqJLRvk6_Xc");
 
-  const ferramentaAlterada = await GerenciadorFerramentas.alteraFerramenta(ferramenta._id, "Teste2", "https://www.teste2.com.br", "infantil", "Teste2", "aprovado", "vqJLRvk6_Xca");
+  const ferramentaAlterada = await GerenciadorFerramentas.alteraFerramenta(ferramenta._id, "Nome Teste2", "https://www.teste2.com.br", "Descrição Teste2", "aprovado", "infantil", "vqJLRvk6_Xca");
 
   expect(ferramentaAlterada).not.toBeNull();
   const {nome, url, usuario, descricao, status, ciclos, video} = ferramentaAlterada;
 
   expect(ferramentaAlterada._id).toStrictEqual(ferramenta._id);
-  expect(nome).toBe("Teste2");
+  expect(nome).toBe("Nome Teste2");
   expect(url).toBe("https://www.teste2.com.br");
   expect(usuario).toBe("Teste"); // não foi alterado
-  expect(descricao).toBe("Teste2");
+  expect(descricao).toBe("Descrição Teste2");
   expect(status).toBe("aprovado");
   expect(ciclos).toBe("infantil");
   expect(video).toBe("vqJLRvk6_Xca");

@@ -17,7 +17,6 @@ router.post('/', (req, res, next) => {
 });
 
 router.post('/criar', async (req, res) => {
-    console.log(req.body);
     const {nome, email, senha} = req.body;
     try {
         await GerenciadorUsuarios.criaUsuario(nome, email, 'usuario' , senha);

@@ -3,7 +3,13 @@ const router = express.Router();
 const { ensureAuth, ensureGuest } = require('../middleware/auth');
 
 router.get('/', ensureAuth, async(req, res) => {
-    res.render('dashboard');
+    const tipoUsuario = req.user.tipo;
+    if(tipoUsuario == "admin") {
+        res.render('dashboard');
+    } else {
+        res.render('dados');
+    }
+
 });
 
 module.exports = router;

@@ -40,10 +40,11 @@ const GerenciadorFerramentas = {
     }
   },
 
-  async alteraFerramenta(id, nome, url, ciclos, descricao, status, video) {
+  async alteraFerramenta(id, nome, url, descricao, status, ciclos, video) {
     try {
       const filtro = {_id: id};
-      const update = {nome, url, ciclos, descricao, status, video};
+      const update = {nome, url, descricao, status, ciclos, video};
+
       const opcoes = {
         new: true,
         runValidators: true
