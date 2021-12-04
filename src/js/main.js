@@ -28,15 +28,32 @@ function configuraDisparosDoModal() {
             // Atualiza o modal de acordo com o conteúdo vindo da requisição AJAX
             const nome = modalFerramenta.querySelector('.modal-title');
             const descricao = modalFerramenta.querySelector('#modal-ferramenta-descricao p');
+            const ciclo = modalFerramenta.querySelector('#modal-ferramenta-ciclos p');
             const url = modalFerramenta.querySelector("#modal-ferramenta-url");
+            const usuario = modalFerramenta.querySelector("#modal-ferramenta-usuario p");
             const iframe = modalFerramenta.querySelector("#modal-ferramenta-iframe-youtube");
+
+            console.log(ferramenta);
 
             nome.textContent = ferramenta.nome;
             descricao.textContent = ferramenta.descricao;
             url.setAttribute("href", ferramenta.url);
+            usuario.textContent = `Está foi uma recomendação do(a) ${ferramenta.usuario}. Aproveite!`;
+            ciclo.textContent = recomendacaoCiclosModal(ferramenta.ciclos);
             iframe.setAttribute("src", `https://www.youtube.com/embed/${ferramenta.video}`);
         });
     })
+}
+
+function recomendacaoCiclosModal(ciclos) {
+    switch (ciclos) {
+        case "todos": return "Ideal para todos os ciclos de aprendizagem";
+        case "infantil": return "Ideal para ser usado no ensino infatil";
+        case "fundamental 1": return "Ideal para ser usado no ensino fundamental 1 (1° ao 5° anos)";
+        case "fundamental 2": return "Ideal para ser usado no ensino fundamental 2 (6° ao 9° anos)";
+        case "médio": return "Ideal para ser usado no ensino médio";
+        case "superior": return "Ideal para ser usado no ensino superior (graduação ou pós)";
+    }
 }
 
 function buscaDadosFerramenta(id, callback) {
@@ -106,7 +123,8 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
     this.montaFerramentaHTML = function() {
         const hostname = new URL(this.url).hostname;
         const faviconSize = 15;
-        const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
+        // FIXME: api depreciada
+        // const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
         const idFerramenta = this.id;
 
         return `
