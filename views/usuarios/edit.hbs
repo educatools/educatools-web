@@ -18,21 +18,21 @@
             <!-- Nome -->
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="nome">Nome</label>
-              <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome" value="{{usuario.nome}}">
+              <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome" value="{{usuario.nome}}" required>
               <small id="nome-help" class="form-text text-muted">Nome completo</small>
             </div>
 
             <!-- E-mail -->
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="email">E-mail</label>
-              <input type="text" class="form-control" id="email" name="email" aria-describedby="email-help" placeholder="email" value="{{usuario.email}}">
+              <input type="text" class="form-control" id="email" name="email" aria-describedby="email-help" placeholder="email" value="{{usuario.email}}" required>
               <small id="email-help" class="form-text text-muted">E-mail</small>
             </div>
 
             <!-- Tipo -->
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="tipo">Tipo de usuário</label>
-              <select id="tipo" class="form-select" name="tipo" aria-describedby="tipo-help">
+              <select id="tipo" class="form-select" name="tipo" aria-describedby="tipo-help" required>
                 {{#select usuario.tipo}}
                     <option value="usuario">usuário</option>
                     <option value="admin">admin</option>
@@ -51,8 +51,3 @@
         </div>
     </section>
 </main>
-
-
-
-        
-        

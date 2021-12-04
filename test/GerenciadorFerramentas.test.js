@@ -1,5 +1,6 @@
 const dbHandler = require('./BancoDeDadosTest');
 const GerenciadorFerramentas = require("../servicos/GerenciadorFerramentas");
+const { TestWatcher } = require('@jest/core');
 
 /** Configuração do Banco de dados em memória */
 beforeAll(async() => await dbHandler.connect());

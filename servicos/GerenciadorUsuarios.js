@@ -3,29 +3,26 @@ const Usuario = require('../modelos/Usuario');
 
 const GerenciadorUsuarios = {
 
-  /**
-   * Cria o primeiro usuário administrador do sistema.
-   */
   async criaUsuarioAdministrador() {
 
     const usuarios = await Usuario.find({ tipo: "admin" });
     if (!usuarios || usuarios.length === 0) {
-
-      console.log("Criando o usuário administrador");
 
       const nome =  process.env.ADMIN_NOME || "admin";
       const email = process.env.ADMIN_EMAIL || "admin";
       const senha = process.env.ADMIN_SENHA || "admin";
       const tipo = "admin";
 
-      await this.criaUsuario(nome, email, tipo, senha);
-
+      return await this.criaUsuario(nome, email, tipo, senha);
     }
 
   },
 
   async criaUsuario(nome, email, tipo, senha) {
-
+    if(this.emailJaCadastrado(email)) {
+      throw new Error("E-mail já cadastrado.")
+    }
+    
     const usuario = new Usuario({tipo, email, nome, senha});
     const conjuntoSalt = await GerenciadorSenhas.genSalt(senha);
     const conjuntoHash = await GerenciadorSenhas.genHash(conjuntoSalt.salt, conjuntoSalt.password);
@@ -86,6 +83,17 @@ const GerenciadorUsuarios = {
     } catch (err) {
         console.error(err);
         throw new Error("Erro ao tentar recuperar todos os usuários.");
+    }
+  },
+
+  async emailJaCadastrado(email) {
+    try {
+      const usuario = await Usuario.findOne({email});
+      console.log("usuario", usuario );
+      return usuario !== null || usuario !== undefined;
+    } catch(err) {
+        console.error(err);
+        throw new Error("Erro ao tentar validar se e-mail já existe.");
     }
   }
 

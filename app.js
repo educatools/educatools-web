@@ -13,12 +13,12 @@ const cors = require('cors');
 
 const GerenciadorUsuarios = require('./servicos/GerenciadorUsuarios');
 
-// Load dev config
+// Carrega os arquivos de configuração (dev)
 if (!isProducao()) {
     dotenv.config({ path: './config/config.env' });
 }
 
-// Passport config
+// Configurações de login
 require('./config/local_passport')(passport);
 
 async function conectaBancoDedados() {
@@ -119,6 +119,7 @@ app.use('/login', require('./routes/login'));
 app.use('/ferramentas', require('./routes/ferramentas'));
 app.use('/dashboard', require('./routes/dashboard'));
 app.use('/usuarios', require('./routes/usuarios'));
+app.use('/validacao', require('./routes/validacao'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(
