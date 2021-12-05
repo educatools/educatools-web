@@ -33,8 +33,6 @@ function configuraDisparosDoModal() {
             const usuario = modalFerramenta.querySelector("#modal-ferramenta-usuario p");
             const iframe = modalFerramenta.querySelector("#modal-ferramenta-iframe-youtube");
 
-            console.log(ferramenta);
-
             nome.textContent = ferramenta.nome;
             descricao.textContent = ferramenta.descricao;
             url.setAttribute("href", ferramenta.url);
@@ -165,9 +163,9 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         badges.set('infantil', { texto: 'Infantil', tipo: 'success' });
         badges.set('fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
         badges.set('fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
-        badges.set('médio', { texto: 'Ensino Fundamental', tipo: 'warning' });
-        badges.set('superior', { texto: 'Ensino Fundamental', tipo: 'secondary' });
-        badges.set('todos', { texto: 'Todos', tipo: 'info' });
+        badges.set('médio', { texto: 'Ensino Médio', tipo: 'warning' });
+        badges.set('superior', { texto: 'Ensino Superior', tipo: 'info' });
+        badges.set('todos', { texto: 'Todos', tipo: 'secondary' });
 
         const { texto, tipo } = badges.get(this.ciclos);
         return `<span class="badge bg-${tipo}" title="${this.ciclos}">${texto}</span>`;
