@@ -10,7 +10,7 @@
     "gulp-dev": "gulp dev",
     "gulp-prod": "gulp build",
     "postinstall": "node ./scripts/post-install.js",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "engines": {
     "node": "14.x"

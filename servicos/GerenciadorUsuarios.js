@@ -19,7 +19,7 @@ const GerenciadorUsuarios = {
   },
 
   async criaUsuario(nome, email, tipo, senha) {
-    if(this.emailJaCadastrado(email)) {
+    if(await this.emailJaCadastrado(email)) {
       throw new Error("E-mail já cadastrado.")
     }
     
@@ -44,6 +44,7 @@ const GerenciadorUsuarios = {
       const opcoes = {
         new: true,
         runValidators: true,
+        useFindAndModify: false
       };
 
       return await Usuario.findOneAndUpdate(filtro, update , opcoes);
@@ -60,7 +61,7 @@ const GerenciadorUsuarios = {
       if (!usuario) {
         throw new Error("Não existe usuário com este id.");
       }
-      await Usuario.remove({ _id: id });
+      await Usuario.deleteOne({ _id: id });
       return true;
     } catch (err) {
       console.error(err);
@@ -88,9 +89,8 @@ const GerenciadorUsuarios = {
 
   async emailJaCadastrado(email) {
     try {
-      const usuario = await Usuario.findOne({email});
-      console.log("usuario", usuario );
-      return usuario !== null || usuario !== undefined;
+      const usuarios = await Usuario.countDocuments({email});
+      return usuarios > 0;
     } catch(err) {
         console.error(err);
         throw new Error("Erro ao tentar validar se e-mail já existe.");

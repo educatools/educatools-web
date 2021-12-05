@@ -47,7 +47,8 @@ const GerenciadorFerramentas = {
 
       const opcoes = {
         new: true,
-        runValidators: true
+        runValidators: true,
+        useFindAndModify: false
       };
 
       return await Ferramenta.findOneAndUpdate(filtro, update , opcoes);
@@ -61,7 +62,7 @@ const GerenciadorFerramentas = {
 
   async deletaFerramenta(id) {
     try { 
-      await Ferramenta.remove({_id: id});
+      await Ferramenta.deleteOne({_id: id});
     } catch(err) {
       throw new Error("Erro ao tentar deletar uma ferramenta", err);
     }
