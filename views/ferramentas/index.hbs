@@ -5,17 +5,19 @@
   </ol>
 </nav>
 
+<h1>Ferrramentas</h1>
+<p>Estas são as ferramentas cadastradas.</p>
+
 <main>
-    <section class="text-center container">
+    <section class="text-center container-fluid">
       <div class="row">
         <div class="col-lg-6 col-md-8 mx-auto container_box">
-            <p>Estas são as ferramentas cadastradas.</p>
             {{#if ferramentas}}
                 <table class="table striped align-middle table-responsive">
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Descrição</th>
+                            <th>Status</th>
                             <th>Usuário</th>
                             <th>Criado em</th>
                             <th>Ações</th>
@@ -25,7 +27,7 @@
                         {{#each ferramentas}}
                         <tr>
                             <td>{{nome}}</td>
-                            <td><span class="dash-status">{{descricao}}</span></td>
+                            <td><span class="dash-status">{{status}}</span></td>
                             <td><span class="dash-status">{{usuario}}</span></td>
                             <td>{{formatDate data 'DD/MM/yyyy'}}</td>
 
