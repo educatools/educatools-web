@@ -27,9 +27,17 @@ router.post('/criar', async (req, res) => {
     }
 });
 
+// referência:
+// https://stackoverflow.com/questions/13758207/why-is-passportjs-in-node-not-removing-session-on-logout
+// https://stackoverflow.com/questions/31641884/does-passports-logout-function-remove-the-cookie-if-not-how-does-it-work#:~:text=Passport's%20logout%20function%20does%20not,isn't%20actually%20a%20problem.
 router.get('/out', (req, res) => {
     req.logout();
-    res.redirect('/');
+    req.logOut();
+    req.session.destroy((err) => {
+        if(err) console.log("Erro ao deslogar", err);
+        res.clearCookie('sid', {path: '/'});
+        res.redirect('/');
+    });
 });
 
 

@@ -93,7 +93,7 @@ app.set('view engine', '.hbs')
 // Sessions
 app.use(
     session({
-        secret: 'keyboard cat',
+        secret: 'educatools',
         resave: false,
         saveUninitialized: false,
         store: new MongoStore({ mongooseConnection: mongoose.connection }),
