@@ -89,8 +89,8 @@
       $.post('/login/criar', {
         nome, email, senha
       }, (data, status) => {
-        console.log("status", status);
-        console.log("data", data);
+        alert("Conta criada com sucesso!");
+        window.location.href = "/login";
       })
 
     });
