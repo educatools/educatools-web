@@ -1,5 +1,6 @@
 const dbHandler = require('./BancoDeDadosTest');
 const GerenciadorFerramentas = require("../servicos/GerenciadorFerramentas");
+const GerenciadorUsuarios = require('../servicos/GerenciadorUsuarios');
 const { TestWatcher } = require('@jest/core');
 
 /** Configuração do Banco de dados em memória */
@@ -62,4 +63,76 @@ test("Deleta uma ferramenta", async () => {
   const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(_id);
 
   expect(ferramenta).toBeNull();
-})
+});
+
+test("Favorita uma ferramenta", async () => {
+  const {_id: ferramentaId} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+
+  const {_id: usuarioId} = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
+
+  await GerenciadorFerramentas.favoritarFerramenta(ferramentaId, usuarioId);
+
+  const Favorito = require("../modelos/Favorito");
+  const favorito = await Favorito.findOne({usuarioId}).lean();
+  expect(favorito).not.toBeNull();
+  expect(favorito.ferramentas.length).toBe(1);
+
+  expect(favorito.usuarioId).toBe(usuarioId.toString());
+  expect(favorito.ferramentas[0]).toBe(ferramentaId.toString());
+});
+
+test("Desfavorita uma ferramenta", async () => {
+  const ferramenta =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+
+  const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
+
+  const ferramentaId = ferramenta._id.toString();
+  const usuarioId = usuario._id.toString();
+
+  await GerenciadorFerramentas.favoritarFerramenta(ferramentaId, usuarioId);
+
+  const Favorito = require("../modelos/Favorito");
+  let favorito = await Favorito.findOne({usuarioId}).lean();
+  expect(favorito).not.toBeNull();
+  expect(favorito.ferramentas.length).toBe(1);
+  expect(favorito.usuarioId).toBe(usuarioId.toString());
+  expect(favorito.ferramentas[0]).toBe(ferramentaId.toString());
+
+  await GerenciadorFerramentas.desfavoritarFerramenta(ferramentaId, usuarioId);
+  favorito = await Favorito.findOne({usuarioId}).lean();
+  expect(favorito.ferramentas.length).toBe(0);
+});
+
+test("Checa se uma ferramenta é favorita", async () => {
+  const ferramenta = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+
+  const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
+
+  const ferramentaId = ferramenta._id.toString();
+  const usuarioId = usuario._id.toString();
+
+  await GerenciadorFerramentas.favoritarFerramenta(ferramentaId, usuarioId);
+
+  const isFavorita = await GerenciadorFerramentas.isFerramentaFavorita(ferramentaId, usuarioId);
+
+  expect(isFavorita).toBeTruthy();
+});
+
+test("Recupera todas as ferramentas favoritas", async () => {
+  const ferramenta1 = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+
+  const ferramenta2 = await GerenciadorFerramentas.criaFerramenta("id2","url2", "usuario2", "nome2", "descricao2", "todos", "video2");
+
+  const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
+
+  const ferramentaId = ferramenta1._id.toString();
+  const ferramentaId2 = ferramenta2._id.toString();
+  const usuarioId = usuario._id.toString();
+
+  await GerenciadorFerramentas.favoritarFerramenta(ferramentaId, usuarioId);
+  await GerenciadorFerramentas.favoritarFerramenta(ferramentaId2, usuarioId);
+
+  const ferramentasFavoritasSalvas = await GerenciadorFerramentas.recuperaTodasFerramentasFavoritas(usuarioId);
+
+  expect(ferramentasFavoritasSalvas.length).toBe(2);
+});

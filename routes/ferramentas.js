@@ -41,7 +41,6 @@ router.get('/edit/:id', async (req, res) => {
 // @rota       GET /ferramentas/all
 router.get('/all', (req, res) => {
   Ferramenta.find({ status: 'aprovado' }, (err, ferramentas) => {
-    console.log("ferramentas que encontrei", ferramentas);
     if (!err) res.send(ferramentas);
     else {
       console.error(err);
@@ -86,16 +85,15 @@ router.delete('/:id', ensureAdmin, async (req, res) => {
       console.error(err);
       res.render('error/500');
   }
-})
+});
 
 // @desc Retorna os dados de apenas uma ferramenta
 // @rota GET /ferramentas/:id
 
 // FIXME: remover ideia de id e fazer por nome (ou inventar um slug tipo o wordpress)
 router.get('/detalhes/:id', (req, res) => {
-  // lembre-se: id é diferente de _id
-  const idFerramenta = req.params.id;
-  Ferramenta.findOne({ id: idFerramenta }, (err, ferramenta) => {
+  const {id: ferramentaId} = req.params;
+  Ferramenta.findOne({ _id: ferramentaId }, (err, ferramenta) => {
     if (!err) {
       res.send(ferramenta)
     } else {

@@ -1,0 +1,54 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Meus favoritos</li>
+  </ol>
+</nav>
+
+<h1>Favoritos</h1>
+<p>Estas são as suas ferramentas educacionais favoritas.</p>
+
+<main>
+    <section class="py-2 text-center container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 mx-auto container_box">
+                <div id="tabelaFavoritos">
+                    {{#if ferramentas}}
+                    <table class="table striped align-middle table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Acesso</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each ferramentas}}
+                            <tr>
+                                <td>{{nome}}</td>
+                                <td>
+                                  <a href={{url}} target="blank">{{url}}</a>
+                                </td>
+                                <td class="flex-buttons">
+                                    <form action="/favoritos/{{_id}}" method="POST" id="delete-form">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn red">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    {{else}}
+                        <p>Não há nenhum favorito.</p>
+                    {{/if}}
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-sm my-2 filter-button" id="gerarExcel">Gerar Excel</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

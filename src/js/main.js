@@ -5,10 +5,29 @@ $(document).ready(() => {
     mostraTodasFerramentas();
     configuraFiltrosDeBusca();
     configuraDisparosDoModal();
+    addListenerParaFavoritar();
 
     // faz com que o vídeo ocupe o espaço todo disponível no modal
     $("#modalFerramenta").fitVids();
 });
+
+function addListenerParaFavoritar() {
+    $("#modal-ferramenta-favoritar").click(() => {
+        const ferramentaId = $("#modal-ferramenta-favoritar").attr("favorito");
+        $.ajax({
+            url: `${URL_API}/favoritos/favoritar/${ferramentaId}`,
+            success: () => {
+                const btnFavoritar = $("#modal-ferramenta-favoritar");
+                if(btnFavoritar.text() === "Favoritar") {
+                    btnFavoritar.text("Desfavoritar");
+                } else {
+                    btnFavoritar.text("Favoritar");
+                }
+            },
+            error: () => alert("Ops! Aconteceu um problema ao favoritar essa ferramenta!"),
+        });
+    })
+}
 
 function configuraDisparosDoModal() {
     const modalFerramenta = document.getElementById('modalFerramenta');
@@ -18,6 +37,9 @@ function configuraDisparosDoModal() {
         const video = $('#modal-ferramenta-iframe-youtube').attr("src");
         $('#modal-ferramenta-iframe-youtube').attr("src", "");
         $('#modal-ferramenta-iframe-youtube').attr("src", video);
+
+        // botão de favorito
+        $("#modal-ferramenta-favoritar").hide();
     });
 
     // SHOW
@@ -32,7 +54,9 @@ function configuraDisparosDoModal() {
             const url = modalFerramenta.querySelector("#modal-ferramenta-url");
             const usuario = modalFerramenta.querySelector("#modal-ferramenta-usuario p");
             const iframe = modalFerramenta.querySelector("#modal-ferramenta-iframe-youtube");
+            const id = modalFerramenta.querySelector("#modal-ferramenta-favoritar");
 
+            if(id) id.setAttribute("favorito", ferramenta._id);
             nome.textContent = ferramenta.nome;
             descricao.textContent = ferramenta.descricao;
             url.setAttribute("href", ferramenta.url);
@@ -40,6 +64,27 @@ function configuraDisparosDoModal() {
             ciclo.textContent = recomendacaoCiclosModal(ferramenta.ciclos);
             iframe.setAttribute("src", `https://www.youtube.com/embed/${ferramenta.video}`);
         });
+
+        // altera o botão de favoritar
+        isFerramentaFavorita(FERRAMENTA_SELECIONADA);
+    })
+}
+
+function isFerramentaFavorita(ferramentaId) {
+    console.log("FERRAMENTAID", ferramentaId);
+    $.ajax({
+        url: `${URL_API}/favoritos/checaFavorito/${ferramentaId}`,
+        success: function(dados) {
+            const botaoFavoritar = $("#modal-ferramenta-favoritar");
+            const isFavorito = dados.favorito;
+            if(isFavorito) {
+                botaoFavoritar.text("Desfavoritar");
+            } else {
+                botaoFavoritar.text("Favoritar");
+            }
+
+            botaoFavoritar.show();
+        }
     })
 }
 
@@ -67,8 +112,8 @@ function mostraTodasFerramentas() {
         success: function(ferramentas) {
             let ferramentasHTML = [];
             if (ferramentas) {
-                ferramentasHTML = ferramentas.map(({ id, url, data, nome, descricao, ciclos, usuario }) => {
-                    return new Ferramenta(id, url, data, nome, descricao, ciclos, usuario);
+                ferramentasHTML = ferramentas.map(({ _id, url, data, nome, descricao, ciclos, usuario }) => {
+                    return new Ferramenta(_id, url, data, nome, descricao, ciclos, usuario);
                 });
             }
 
@@ -123,10 +168,10 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         const faviconSize = 15;
         // FIXME: api depreciada
         // const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
-        const idFerramenta = this.id;
+        const ferramentaId = this.id;
 
         return `
-      <div onclick="abreModal('${idFerramenta}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
+      <div onclick="abreModal('${ferramentaId}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
         <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
             <div class="card-body">
@@ -172,8 +217,8 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
     };
 }
 
-function abreModal(idFerramenta) {
-    FERRAMENTA_SELECIONADA = idFerramenta;
+function abreModal(ferramentaId) {
+    FERRAMENTA_SELECIONADA = ferramentaId;
     $('#modalFerramenta').modal('show');
 }
 

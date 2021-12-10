@@ -120,6 +120,7 @@ app.use('/ferramentas', require('./routes/ferramentas'));
 app.use('/dashboard', require('./routes/dashboard'));
 app.use('/usuarios', require('./routes/usuarios'));
 app.use('/validacao', require('./routes/validacao'));
+app.use('/favoritos', require('./routes/favoritos'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(

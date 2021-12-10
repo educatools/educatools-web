@@ -1,4 +1,4 @@
-const moment = require('moment')
+const moment = require('moment');
 
 module.exports = {
   formatDate: function (date, format) {
@@ -39,5 +39,5 @@ module.exports = {
         new RegExp('>' + selected + '</option>'),
         ' selected="selected"$&'
       )
-  },
+  }
 }

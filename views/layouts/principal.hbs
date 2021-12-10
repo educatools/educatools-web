@@ -31,6 +31,11 @@
           </div>
         </div>
         <div class="modal-footer">
+          {{#if user}}
+          <button id="modal-ferramenta-favoritar" favorito="" class="btn btn-warning" href="" role="button">
+            Favoritar
+          </button>
+          {{/if}}
           <a id="modal-ferramenta-url" class="btn btn-primary" href="#" target="_blank" role="button">
             <i class="fas fa-arrow-right"></i> Acessar
           </a>
