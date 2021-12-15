@@ -67,6 +67,7 @@ if (!isProducao()) {
 // Handlebars Helpers
 const {
     formatDate,
+    checked,
     stripTags,
     truncate,
     editIcon,
@@ -79,6 +80,7 @@ app.engine(
     exphbs({
         helpers: {
             formatDate,
+            checked,
             stripTags,
             truncate,
             editIcon,
@@ -121,6 +123,7 @@ app.use('/dashboard', require('./routes/dashboard'));
 app.use('/usuarios', require('./routes/usuarios'));
 app.use('/validacao', require('./routes/validacao'));
 app.use('/favoritos', require('./routes/favoritos'));
+app.use('/grupos', require('./routes/grupos'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(

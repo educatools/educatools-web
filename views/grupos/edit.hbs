@@ -1,0 +1,231 @@
+<style>
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 40vh;
+    overflow-y: auto;
+}
+</style>
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="/grupos">Meus grupos</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Editar grupo</li>
+  </ol>
+</nav>
+
+<h1>Editar grupo</h1>
+<p>Altere os dados do grupo conforme necessário.</p>
+
+<main>
+  <section class="container-fluid">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 mx-auto container_box">
+        <div id="formulario-grupo">
+
+          <input id="id-grupo" type="hidden" value="{{grupo._id}}" />
+          
+          <!-- esconde o método http - method override -->
+          <input type="hidden" name="_method" value="PUT">
+
+          <!-- Nome -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help"
+              placeholder="nome" value="{{grupo.nome}}">
+            <small id="nome-help" class="form-text text-muted">Nome do grupo</small>
+          </div>
+
+          <!-- Compartilhar -->
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="compartilhado" {{checked grupo.compartilhado}}>
+            <label class="form-check-label" for="compartilhado">Compartilhar</label>
+          </div>
+
+          <!-- Ferramentas -->
+          <div class="row" style="margin-top: 20px; margin-bottom: 20px">
+            <label for="tabelaFerramentasGrupo">Ferramentas</label>
+            <div class="col-lg-6 col-md-8 mx-auto container_box">
+              <div id="tabelaFerramentasGrupo">
+                <table class="table striped align-middle table-responsive">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ferramentas-do-grupo">
+                    {{#if ferramentas}}
+                      {{#each ferramentas}}
+                        <tr>
+                          <td identificador="{{_id}}">{{nome}}</td>
+                        </tr>
+                      {{/each}}
+                    {{else}}
+                      <tr>
+                        <td>Por enquanto não há ferramentas selecionadas.</td>
+                      </tr>
+                    {{/if}}
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn btn-primary btn-sm my-2" id="addFerramentaGrupo" data-bs-toggle="modal"
+                data-bs-target="#modalFerramentas"><i class="fas fa-plus"></i> Adicionar
+                ferramenta(s)</button>
+            </div>
+          </div>
+
+          <button id="btn_cadastrarGrupo" class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- modal de ferramentas -->
+<div class="modal" id="modalFerramentas" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ferramentas disponíveis</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Selecionar</th>
+              <th scope="col">Nome</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaFerramentas">
+            <!-- carregado via ajax -->
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.onload = () => {
+    window.FERRAMENTAS_GRUPO = [];
+    window.FERRAMENTAS_GRUPO_MODAL_CARREGADO = false;
+
+   // envio das alterações do grupo
+    document.getElementById("btn_cadastrarGrupo").addEventListener("click", () => {
+      const idGrupo = document.getElementById("id-grupo").value;
+      
+      $.ajax({
+        url: `/grupos/${idGrupo}`,
+        type: "POST",
+        data: {
+          nome: document.getElementById("nome").value,
+          ferramentas: JSON.stringify(FERRAMENTAS_GRUPO),
+          compartilhado: document.getElementById("compartilhado").checked  
+        },
+        success: function(result) {
+          alert("Grupo alterado com sucesso!");
+          window.location.href = "/grupos";
+        }
+      });
+
+    });
+
+    const modalFerramentas = document.getElementById('modalFerramentas');
+    modalFerramentas.addEventListener('show.bs.modal', (e) => {
+      if(!FERRAMENTAS_GRUPO_MODAL_CARREGADO) {
+        buscaTodasFerramentasDisponiveis();
+        FERRAMENTAS_GRUPO_MODAL_CARREGADO = true;
+      }
+    });
+    modalFerramentas.addEventListener('hide.bs.modal', (e) => {
+      atualizaFerramentasDoGrupo();
+    });
+
+    // organiza os ids das ferramentas já carregadas
+    const tds = Array.from(document.getElementsByTagName("td"));
+    tds.forEach(td => {
+      if(td.innerText.indexOf("Por enquanto") < 0) {
+        FERRAMENTAS_GRUPO.push({
+          id: td.getAttribute("identificador"),
+          nome: td.innerText
+        })
+      }
+    });
+  }
+
+  function buscaTodasFerramentasDisponiveis() {
+    $.ajax({
+      url: `/ferramentas/all`,
+      success: function (ferramentas) {
+        ferramentas.forEach(ferramenta => {
+          const tr = document.createElement("tr");
+          const thSelecionado = document.createElement("th");
+          //thSelecionado.setAttribute("scope", "row");
+
+          const inputSelecionado = document.createElement("input");
+          inputSelecionado.setAttribute("type", "checkbox");
+          inputSelecionado.setAttribute("identificador", ferramenta._id);
+          inputSelecionado.addEventListener("click", e => {
+            const input = e.target;
+            const id = input.getAttribute("identificador");
+            if(input.checked) FERRAMENTAS_GRUPO.push({
+              id: ferramenta._id,
+              nome: ferramenta.nome
+            });
+            else {
+              FERRAMENTAS_GRUPO = FERRAMENTAS_GRUPO.filter(ferramenta => {
+                return ferramenta.id !== id;
+              })
+              //const index = FERRAMENTAS_GRUPO.indexOf(id);
+              //FERRAMENTAS_GRUPO.splice(index,1);
+            }
+          });
+          
+          if(FERRAMENTAS_GRUPO.some(f => {
+            return f.id === ferramenta._id;
+          })) {
+            inputSelecionado.setAttribute("checked", true);
+          }
+
+          thSelecionado.append(inputSelecionado);
+
+          const tdNome = document.createElement("td");
+          tdNome.innerHTML = ferramenta.nome;
+
+          tr.append(thSelecionado);
+          tr.append(tdNome);
+
+          document.getElementById("tabelaFerramentas").append(tr);
+        });
+      }
+    });
+  }
+
+  function atualizaFerramentasDoGrupo() {
+    const ferramentasDoGrupo = document.getElementById("ferramentas-do-grupo");
+    ferramentasDoGrupo.innerHTML = ""; // remove a tabela para atualizarmos
+
+    if(FERRAMENTAS_GRUPO.length > 0) {
+      FERRAMENTAS_GRUPO.forEach(ferramenta => {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.innerText = ferramenta.nome;
+
+        tr.append(td);
+        ferramentasDoGrupo.append(tr);
+      });
+    } else {
+      ferramentasDoGrupo.innerText = "Por enquanto não há ferramentas selecionadas."
+    }
+    
+  }
+
+</script>

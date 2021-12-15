@@ -1,0 +1,16 @@
+<h1>{{grupo.nome}}</h1>
+<p>Grupo criado por: <i>{{usuario.nome}}</i></p>
+
+<hr />
+
+<h3>Ferramentas</h3>
+
+{{#if ferramentas}}
+  <ul>
+    {{#each ferramentas}}
+      <li><a href="{{url}}" target="_blank">{{nome}}</a></li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>Não há nenhuma ferramenta sugerida.</p>
+{{/if}}

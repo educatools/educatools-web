@@ -2,13 +2,18 @@ const URL_API = window.location.href.substr(0, window.location.href.length - 1);
 let FERRAMENTA_SELECIONADA = null;
 
 $(document).ready(() => {
-    mostraTodasFerramentas();
-    configuraFiltrosDeBusca();
-    configuraDisparosDoModal();
-    addListenerParaFavoritar();
+    
+    // somente na página pública
+    if(location.pathname === "/") {
+        mostraTodasFerramentas();
+        configuraFiltrosDeBusca();
+        configuraDisparosDoModal();
+        addListenerParaFavoritar();
+        
+        // faz com que o vídeo ocupe o espaço todo disponível no modal
+        $("#modalFerramenta").fitVids();
+    }
 
-    // faz com que o vídeo ocupe o espaço todo disponível no modal
-    $("#modalFerramenta").fitVids();
 });
 
 function addListenerParaFavoritar() {
