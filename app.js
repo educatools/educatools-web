@@ -124,6 +124,7 @@ app.use('/usuarios', require('./routes/usuarios'));
 app.use('/validacao', require('./routes/validacao'));
 app.use('/favoritos', require('./routes/favoritos'));
 app.use('/grupos', require('./routes/grupos'));
+app.use('/estatisticas', require('./routes/estatisticas'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(

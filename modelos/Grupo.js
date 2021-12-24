@@ -19,7 +19,11 @@ const GrupoSchema = mongoose.Schema({
   },
   ferramentas: [{
     type: String
-  }]
+  }],
+  criadoEm: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model('Grupo', GrupoSchema);

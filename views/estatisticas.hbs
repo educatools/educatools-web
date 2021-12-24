@@ -1,0 +1,200 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Estatísticas</li>
+  </ol>
+</nav>
+
+<style>
+  #graficos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .grafico {
+    position: relative;
+    width: 500px;
+    margin: 20px;
+  }
+
+  #filtros {
+    margin-bottom: 40px;
+  }
+</style>
+
+<h1>Estatísticas</h1>
+<p>Informações sobre o uso do sistema.</p>
+
+<main>
+  <div id="filtros" class="container-fluid">
+    <h3>Filtro por data</h3>
+    <p>Por padrão, são exibidos os dados dos últimos 30 dias.</p>
+    <div class="row">
+      <div class="form-floating col-sm-12 col-md-4">
+        <input id="data-inicio" class="form-control data" placeholder="-">
+        <label for="data-inicio">Data início</label>
+      </div>
+
+      <div class="form-floating col-sm-12 col-md-4">
+        <input id="data-fim" class="form-control data" placeholder="-">
+        <label for="data-fim">Data fim</label>
+      </div>
+
+      <div class="form-floating col-sm-12 col-md-4">
+        <button id="btn-filtrar" type="button" class="btn btn-primary">Filtrar</button>
+      </div>
+    </div>
+  </div>
+  <div id="graficos">
+    <!-- Gráfico Usuarios -->
+    <div class="grafico">
+      <canvas id="grafico-usuarios"></canvas>
+    </div>
+
+    <!-- Gráfico Ferramentas -->
+    <div class="grafico">
+      <canvas id="grafico-ferramentas"></canvas>
+    </div>
+
+    <!-- Gráfico Ferramentas (por status) -->
+    <div class="grafico">
+      <canvas id="grafico-ferramentas-status"></canvas>
+    </div>
+
+    <!-- Gráfico Grupos -->
+    <div class="grafico">
+      <canvas id="grafico-grupos"></canvas>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  //Referência: data utilizada nos filtros https://qastack.com.br/programming/1296358/subtract-days-from-a-date-in-javascript
+  window.onload = () => {
+    window.graficos = new Map(); // controle dos gráficos exibidos
+
+    const { dataInicio, dataFim } = filtrosDeDatasUltimos30Dias();
+    constroiOuAtualizaGraficos(dataInicio, dataFim);
+
+    // botão de filtro
+    document.getElementById("btn-filtrar").addEventListener('click', () => {
+      const dataInicio = document.getElementById('data-inicio').value;
+      const dataFim = document.getElementById('data-fim').value;
+      constroiOuAtualizaGraficos(dataInicio, dataFim);
+    });
+
+    adicionaDatePickerBootstrapNaPagina();
+  }
+
+  function adicionaDatePickerBootstrapNaPagina() {
+    // datepicker
+    const dp = document.createElement('script');
+    dp.type = 'text/javascript';
+    dp.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js");
+    document.body.appendChild(dp);
+
+    // datepicker pt-br
+    const dpPTBR = document.createElement('script');
+    dpPTBR.type = 'text/javascript';
+    dpPTBR.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js');
+    document.body.appendChild(dpPTBR);
+
+    setTimeout(() => {
+      $('.data').datepicker({
+        format: "yyyy-mm-dd",
+        maxViewMode: 1,
+        clearBtn: true,
+        language: "pt-BR",
+        multidate: false,
+        todayHighlight: true,
+        orientation: "bottom auto"
+      });
+    }, 2000);
+  }
+
+  function constroiOuAtualizaGraficos(dataInicio, dataFim) {
+    // usuários
+    constroiGrafico("grafico-usuarios", "/estatisticas/usuarios", dataInicio, dataFim, "Usuários", "Usuários criados");
+
+    // ferramentas
+    constroiGrafico("grafico-ferramentas", "estatisticas/ferramentas", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas");
+
+    // grupos
+    constroiGrafico("grafico-grupos", "estatisticas/grupos", dataInicio, dataFim, "Grupos", "Grupos criados (compartilhado x não compartilhado)");
+
+    // ferramentas (por status)
+    constroiGrafico("grafico-ferramentas-status", "estatisticas/ferramentas-status", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas (por status)");
+  }
+
+  function filtrosDeDatasUltimos30Dias() {
+    const trintaDiasAtras = (24 * 60 * 60 * 1000) * 30; // 30 dias
+    let dataAtual = new Date();
+    let dataInicio = dataAtual.setTime(dataAtual.getTime() - trintaDiasAtras);
+    dataInicio = formataDataParaBusca(new Date(dataInicio));
+    const dataFim = formataDataParaBusca(new Date());
+
+    return { dataInicio, dataFim };
+  }
+
+  function formataDataParaBusca(data) {
+    return `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
+  }
+
+  function limpaGraficos(graficoId) {
+    if(window.graficos.size > 0) {
+      const grafico = window.graficos.get(graficoId);
+      if(grafico) grafico.destroy();
+    }
+  }
+
+  function constroiGrafico(id, url, dataInicio, dataFim, label, texto) {
+    $.ajax({
+      url: `${url}/${dataInicio}/${dataFim}`,
+      success: dados => {
+        limpaGraficos(id);
+        const labels = [];
+        const valores = []; 
+        dados.forEach(dado => {
+          labels.push(dado._id);
+          valores.push(dado.count);
+        });
+        
+        const ctx = document.getElementById(id);
+        const grafico = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label,
+              data: valores,
+              backgroundColor: [
+                'rgb(255, 99, 132)', 
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: texto
+              }
+            }
+          },
+        });
+
+        window.graficos.set(id, grafico);
+      }
+    })
+
+  }
+
+</script>

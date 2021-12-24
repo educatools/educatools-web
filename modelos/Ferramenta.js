@@ -9,7 +9,7 @@ const FerramentaSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  data: {
+  criadoEm: {
     type: Date,
     default: Date.now,
   },
