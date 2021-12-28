@@ -21,7 +21,7 @@ const GerenciadorFerramentas = {
     }
   },
 
-  async criaFerramenta(id, url, usuario, nome, descricao, ciclos, video) {
+  async criaFerramenta(id, url, usuario, nome, descricao, ciclos, video, desenvolvedor) {
     const ferramenta = new Ferramenta({
       id,
       url,
@@ -30,7 +30,8 @@ const GerenciadorFerramentas = {
       nome,
       descricao,
       ciclos,
-      video
+      video, 
+      desenvolvedor
     });
 
     try {
@@ -41,10 +42,10 @@ const GerenciadorFerramentas = {
     }
   },
 
-  async alteraFerramenta(id, nome, url, descricao, status, ciclos, video) {
+  async alteraFerramenta(id, nome, url, descricao, status, ciclos, video, desenvolvedor) {
     try {
       const filtro = {_id: id};
-      const update = {nome, url, descricao, status, ciclos, video};
+      const update = {nome, url, descricao, status, ciclos, video, desenvolvedor};
 
       const opcoes = {
         new: true,

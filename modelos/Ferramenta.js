@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const FerramentaSchema = mongoose.Schema({
   id: {
     type: String,
-    required: true
+    required: false
   },
   url: {
     type: String,
@@ -38,6 +38,10 @@ const FerramentaSchema = mongoose.Schema({
     type: String,
     default: 'sugestão',
     enum: ['aprovado', 'reprovado', 'sugestão']
+  },
+  desenvolvedor: {
+    type: String,
+    default: '-'
   }
 });
 

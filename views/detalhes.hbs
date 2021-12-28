@@ -1,0 +1,213 @@
+<style>
+  body {
+    overflow-x: hidden;
+  }
+
+  #header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  #conteudo button {
+    border-radius: 1rem;
+  }
+
+  .visaogeral-item {
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .visaogeral-item-video {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .header-item {
+    margin: 20px;
+  }
+
+  .comentario {
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (min-width: 1200px) {
+    #conteudo-abas {
+      width: 70vw;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>
+
+<div id="header">
+  <div class="header-item">
+    <h1>{{ferramenta.nome}}</h1>
+    <p><strong>Desenvolvido por:</strong> {{ferramenta.desenvolvedor}}</p>
+  </div>
+  <div class="header-item">
+    <a class="btn btn-primary" href="{{ferramenta.url}}" target="_blank" role="button">Acessar</a>
+    
+    {{#if user}}
+      {{#if ferramenta.favorita}}
+      <button type="button" id="btn-favoritar" class="btn btn-warning">Desfavoritar</button>
+      {{else}}
+      <button type="button" id="btn-favoritar" class="btn btn-warning">Favoritar</button>
+      {{/if}}
+    {{/if}}
+  </div>
+  <input id="identificador" type="text" value="{{ferramenta._id}}" hidden/>
+</div>
+
+<hr />
+
+<div id="conteudo">
+  
+  <!-- botões de navegação -->
+  <div class="row">
+    <ul class="nav nav-pills mb-3 ms-3 justify-content-center" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="visaogeral-tab" data-bs-toggle="pill" data-bs-target="#visaogeral"
+          type="button" role="tab" aria-controls="visaogeral" aria-selected="true">Visão geral</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="comentarios-tab" data-bs-toggle="pill" data-bs-target="#comentarios" type="button"
+          role="tab" aria-controls="comentarios" aria-selected="false">Comentários</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- conteúdo de navegação -->
+  <div class="tab-content" id="conteudo-abas">
+
+    <!-- visão geral -->
+    <div class="tab-pane fade show active" id="visaogeral" role="tabpanel" aria-labelledby="visaogeral-tab">
+
+      <div class="row">
+        <div class="col-xs-12 col-xl-5">
+          <div class="visaogeral-item-video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ferramenta.video}}"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="col-xs-12 col-xl-7">
+          <div class="visaogeral-item">
+            <div>
+              <h5><i class="fas fa-info-circle"></i> Descrição</h5>
+              <p>{{ferramenta.descricao}}</p>
+            </div>
+            <div>
+              <h5><i class="fas fa-circle-notch"></i> Ciclos</h5>
+              <p>O ciclo de ensino ideal para uso: {{ferramenta.ciclos}}</p>
+            </div>
+            <div>
+              <h5><i class="fas fa-user"></i> Recomendação</h5>
+              <p>Ferramenta recomendada por: {{ferramenta.usuario}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- fim: visão geral -->
+
+    <!-- comentários -->
+    <div class="tab-pane fade" id="comentarios" role="tabpanel" aria-labelledby="comentarios-tab">
+      <div id="avaliacoes">
+      {{#if comentarios}}
+        {{#each comentarios}}
+          <div class="card comentario">
+            <div class="card-body">
+              <h5 class="card-title">{{usuario}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{formatDate criadoEm 'DD/MM/yyyy'}}</h6>
+              <p class="card-text">{{comentario}}</p>
+              {{#if proprioOuAdmin}}
+                <a href="javascript:excluirComentario('{{_id}}');" class="card-link">Excluir comentário</a>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p>Não há comentários.</p>
+      {{/if}}
+      </div>
+      {{#if user}}
+        <div id="enviar-avaliacao">
+          <div class="mb-3">
+            <label for="avaliacao-text-area" class="form-label">Escreva o seu comentário!</label>
+            <textarea class="form-control" id="avaliacao-text-area" rows="5"></textarea>
+          </div>
+          <button type="button" id="avaliacao-botao" class="btn btn-primary">Enviar</button>
+        </div>
+      {{/if}}
+    </div>
+    <!-- fim: comentários -->
+  </div>
+</div>
+
+<a href="/" class="add-btn-float">
+  <i class="fa fa-arrow-left fbtn-float"></i>
+</a>
+
+<script>
+  window.onload = () => {
+    
+    document.getElementById("avaliacao-botao").addEventListener("click", () => {
+      const ferramentaId = document.getElementById("identificador").value;
+      const comentario = document.getElementById("avaliacao-text-area").value;
+      $.post({
+        url: `/comentarios/${ferramentaId}`,
+        data: {
+          comentario
+        },
+        success: (data) => {
+          alert("Comentário enviado com sucesso!");
+          window.location.reload(true);
+        },
+        error: (error) => {
+          alert("Ops! Seu comentário não foi enviado!");
+          window.location.reload(true);
+        }
+      })
+    });
+
+    document.getElementById("btn-favoritar").addEventListener("click", () => {
+      const ferramentaId = document.getElementById("identificador").value;
+      $.ajax({
+        url: `/favoritos/favoritar/${ferramentaId}`,
+        success: () => {
+          const btnFavoritar = $("#btn-favoritar");
+          if (btnFavoritar.text() === "Favoritar") {
+            btnFavoritar.text("Desfavoritar");
+          } else {
+            btnFavoritar.text("Favoritar");
+          }
+        },
+        error: () => alert("Ops! Aconteceu um problema ao favoritar essa ferramenta!"),
+      });
+    });
+
+  }
+
+  function excluirComentario(comentarioId) {
+    $.ajax({
+      url: `/comentarios/${comentarioId}`,
+      type: 'DELETE',
+      success: (data) => {
+        alert("Seu comentário foi removido com sucesso!");
+        window.location.reload(true);
+      },
+      error: (data) => {
+        alert("Ops! Seu comentário não foi removido!");
+        window.location.reload(true);
+      }
+    });
+  }
+</script>

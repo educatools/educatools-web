@@ -176,12 +176,12 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         const ferramentaId = this.id;
 
         return `
-      <div onclick="abreModal('${ferramentaId}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
+      <div onclick="abreDetalhes('${ferramentaId}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
         <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
             <div class="card-body">
               <h5 class="card-title">${this.nome}</h5>
-              <p class="card-text">${this.descricao}</p>
+              <p class="card-text">${this.__descricaoResumida()}</p>
               <div class="d-flex justify-content-center align-items-center">
                 <div class="flex-grow-1">
                   <small class="text-muted">para:&nbsp</small>
@@ -194,6 +194,14 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         </a>
         </div>
       `
+    };
+
+    this.__descricaoResumida = function() {
+        if(this.descricao.length > 250) {
+            return this.descricao.substr(0, 250) + "...";
+        } else {
+            return this.descricao;
+        }
     };
 
     this.__montaCategoriaClasse = function() {
@@ -222,9 +230,10 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
     };
 }
 
-function abreModal(ferramentaId) {
+function abreDetalhes(ferramentaId) {
     FERRAMENTA_SELECIONADA = ferramentaId;
-    $('#modalFerramenta').modal('show');
+    // $('#modalFerramenta').modal('show');
+    window.location.href = `/detalhes/${ferramentaId}`;
 }
 
 

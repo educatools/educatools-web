@@ -9,7 +9,7 @@ afterEach(async() => await dbHandler.clearDatabase());
 afterAll(async() => await dbHandler.closeDatabase());
 
 test('Cria uma nova ferramenta', async () => {
-  const ferramenta = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const ferramenta = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
   expect(ferramenta).not.toBeNull();
   expect(ferramenta.id).toBe("id");
@@ -19,16 +19,17 @@ test('Cria uma nova ferramenta', async () => {
   expect(ferramenta.descricao).toBe("descricao");
   expect(ferramenta.ciclos).toBe("todos");
   expect(ferramenta.video).toBe("video");
+  expect(ferramenta.desenvolvedor).toBe("desenvolvedor");
 
 });
 
 test("Altera dados de uma ferramenta", async () => {
-  const ferramenta = await GerenciadorFerramentas.criaFerramenta("Teste", "https://www.teste.com.br", "Teste", "Teste", "Teste", "todos", "vqJLRvk6_Xc");
+  const ferramenta = await GerenciadorFerramentas.criaFerramenta("Teste", "https://www.teste.com.br", "Teste", "Teste", "Teste", "todos", "vqJLRvk6_Xc", "desenvolvedor");
 
-  const ferramentaAlterada = await GerenciadorFerramentas.alteraFerramenta(ferramenta._id, "Nome Teste2", "https://www.teste2.com.br", "Descrição Teste2", "aprovado", "infantil", "vqJLRvk6_Xca");
+  const ferramentaAlterada = await GerenciadorFerramentas.alteraFerramenta(ferramenta._id, "Nome Teste2", "https://www.teste2.com.br", "Descrição Teste2", "aprovado", "infantil", "vqJLRvk6_Xca", "desenvolvedor 2");
 
   expect(ferramentaAlterada).not.toBeNull();
-  const {nome, url, usuario, descricao, status, ciclos, video} = ferramentaAlterada;
+  const {nome, url, usuario, descricao, status, ciclos, video, desenvolvedor} = ferramentaAlterada;
 
   expect(ferramentaAlterada._id).toStrictEqual(ferramenta._id);
   expect(nome).toBe("Nome Teste2");
@@ -38,26 +39,26 @@ test("Altera dados de uma ferramenta", async () => {
   expect(status).toBe("aprovado");
   expect(ciclos).toBe("infantil");
   expect(video).toBe("vqJLRvk6_Xca");
-
-})
+  expect(desenvolvedor).toBe("desenvolvedor 2");
+});
 
 test('Recupera todas as ferramentas', async () => {
-  await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
-  await GerenciadorFerramentas.criaFerramenta("id2", "url2", "usuario2", "nome2", "descricao2", "todos", "video2");
+  await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
+  await GerenciadorFerramentas.criaFerramenta("id2", "url2", "usuario2", "nome2", "descricao2", "todos", "video2", "desenvolvedor 2");
   
   const ferramentas = await GerenciadorFerramentas.recuperaTodasFerramentas();
   expect(ferramentas.length).toBe(2);
 });
 
 test('Recupera uma ferramenta por id', async () => {
-  const {_id} = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const {_id} = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
   const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(_id);
   expect(ferramenta).not.toBeNull();
   expect(ferramenta._id).toStrictEqual(_id);
 });
 
 test("Deleta uma ferramenta", async () => {
-  const {_id} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const {_id} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
   await GerenciadorFerramentas.deletaFerramenta(_id);
   const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(_id);
@@ -66,7 +67,7 @@ test("Deleta uma ferramenta", async () => {
 });
 
 test("Favorita uma ferramenta", async () => {
-  const {_id: ferramentaId} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const {_id: ferramentaId} =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
   const {_id: usuarioId} = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
 
@@ -82,7 +83,7 @@ test("Favorita uma ferramenta", async () => {
 });
 
 test("Desfavorita uma ferramenta", async () => {
-  const ferramenta =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const ferramenta =   await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
   const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
 
@@ -104,7 +105,7 @@ test("Desfavorita uma ferramenta", async () => {
 });
 
 test("Checa se uma ferramenta é favorita", async () => {
-  const ferramenta = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const ferramenta = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
   const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
 
@@ -119,9 +120,9 @@ test("Checa se uma ferramenta é favorita", async () => {
 });
 
 test("Recupera todas as ferramentas favoritas", async () => {
-  const ferramenta1 = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video");
+  const ferramenta1 = await GerenciadorFerramentas.criaFerramenta("id","url", "usuario", "nome", "descricao", "todos", "video", "desenvolvedor");
 
-  const ferramenta2 = await GerenciadorFerramentas.criaFerramenta("id2","url2", "usuario2", "nome2", "descricao2", "todos", "video2");
+  const ferramenta2 = await GerenciadorFerramentas.criaFerramenta("id2","url2", "usuario2", "nome2", "descricao2", "todos", "video2", "desenvolvedor 2");
 
   const usuario = await GerenciadorUsuarios.criaUsuario("Teste", "teste@teste.com.br", "admin", "senha");
 

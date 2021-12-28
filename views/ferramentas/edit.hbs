@@ -18,18 +18,18 @@
             <!-- esconde o método http - method override -->
             <input type="hidden" name="_method" value="PUT">
             
-            <!-- Identificador -->
-            <div class="form-group" style="margin-bottom: 20px;">
-              <label for="id">Identificador</label>
-              <input type="text" class="form-control" id="id" name="id" aria-describedby="id-help" placeholder="id" value="{{ferramenta.id}}">
-              <small id="id-help" class="form-text text-muted">Identificador ferramenta</small>
-            </div>
-            
             <!-- Nome -->
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="nome">Nome</label>
               <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome-help" placeholder="nome" value="{{ferramenta.nome}}">
               <small id="nome-help" class="form-text text-muted">Nome da ferramenta</small>
+            </div>
+
+            <!-- Desenvolvedor -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="desenvolvedor">Desenvolvedor</label>
+              <input type="text" class="form-control" id="desenvolvedor" name="desenvolvedor" aria-describedby="desenvolvedor-help" placeholder="desenvolvedor" value="{{ferramenta.desenvolvedor}}">
+              <small id="desenvolvedor-help" class="form-text text-muted">Pessoa, empresa ou grupo responsável pela ferramenta</small>
             </div>
             
             <!-- URL -->
@@ -42,7 +42,7 @@
             <!-- Descrição -->
             <div class="form-group" style="margin-bottom: 20px;">
               <label for="descricao">Descrição</label>
-              <input type="text" class="form-control" id="descricao" name="descricao" aria-describedby="descricao-help" placeholder="descricao" value="{{ferramenta.descricao}}">
+              <textarea type="text" class="form-control" id="descricao" name="descricao" aria-describedby="descricao-help" placeholder="descricao" rows="5">{{ferramenta.descricao}}</textarea>
               <small id="descricao-help" class="form-text text-muted">Uma breve descrição do que faz a ferramenta</small>
             </div>
             

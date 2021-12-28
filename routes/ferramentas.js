@@ -52,9 +52,9 @@ router.get('/all', (req, res) => {
 // @rota       POST /ferramentas/salvar
 router.post('/', ensureAuth, async (req, res) => {
   const usuario = req.user.nome;
-  const { id, nome, url, ciclos, descricao, video } = req.body;
+  const { id, nome, url, ciclos, descricao, video, desenvolvedor } = req.body;
   try {
-    await GerenciadorFerramentas.criaFerramenta(id, url, usuario, nome, descricao, ciclos, video);
+    await GerenciadorFerramentas.criaFerramenta(id, url, usuario, nome, descricao, ciclos, video, desenvolvedor);
     res.redirect('/ferramentas');
   } catch(err) {
     console.error(err);
@@ -65,9 +65,9 @@ router.post('/', ensureAuth, async (req, res) => {
 router.put('/:id', ensureAdmin, async (req, res) => {
   try {
     const id = req.params.id;
-    const { nome, url, descricao, status, ciclos, video } = req.body;
+    const { nome, url, descricao, status, ciclos, video, desenvolvedor } = req.body;
 
-    await GerenciadorFerramentas.alteraFerramenta(id, nome, url, descricao, status, ciclos, video);
+    await GerenciadorFerramentas.alteraFerramenta(id, nome, url, descricao, status, ciclos, video, desenvolvedor);
     
     res.redirect('/ferramentas');
 
