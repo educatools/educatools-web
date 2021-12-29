@@ -10,49 +10,69 @@
 
 <main>
   <section class="text-center container-fluid">
-      <div class="row">
-        <div class="col-lg-6 col-md-8 mx-auto container_box">
-            {{#if avisos}}
-                <table class="table striped align-middle table-responsive">
-                    <thead>
-                        <tr>
-                            <th>Data Inicial</th>
-                            <th>Data Final</th>
-                            <th>Mensagem</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each avisos}}
-                        <tr>
-                            <td>{{formatDate dataInicial 'DD/MM/yyyy'}}</td>
-                            <td>{{formatDate dataFinal 'DD/MM/yyyy'}}</td>
-                            <td>{{mensagem}}</td>
+    <div class="row">
+      <div class="col-lg-6 col-md-8 mx-auto container_box">
+        <div id="tabela-avisos">
+          {{#if avisos}}
+          <table class="table striped align-middle table-responsive">
+            <thead>
+              <tr>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Mensagem</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each avisos}}
+              <tr>
+                <td>{{formatDate dataInicial 'DD/MM/yyyy'}}</td>
+                <td>{{formatDate dataFinal 'DD/MM/yyyy'}}</td>
+                <td>{{mensagem}}</td>
 
-                            <td class="flex-buttons">
-                                <a href="/avisos/edit/{{_id}}" class="btn btn-float">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="/avisos/{{_id}}" method="POST" id="delete-form">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn red">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            {{else}}
-                <p>Não há avisos.</p>
-            {{/if}}
+                <td class="flex-buttons">
+                  <a href="/avisos/edit/{{_id}}" class="btn btn-float">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <form action="/avisos/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <p>Não há avisos.</p>
+          {{/if}}
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm my-2 filter-button" id="exportar">Exportar dados</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
 </main>
 
 <a href="/avisos/add" class="add-btn-float">
-    <i class="fa fa-plus fbtn-float"></i>
+  <i class="fa fa-plus fbtn-float"></i>
 </a>
+
+<script>
+  window.onload = function () {
+    $("#exportar").click(function (e) {
+      const a = document.createElement('a');
+      const dataType = 'data:application/vnd.ms-excel';
+      const tableDiv = document.getElementById('tabela-avisos');
+      const tableHTML = tableDiv.outerHTML.replace(/ /g, '%20');
+      a.href = dataType + ', ' + tableHTML;
+      a.download = 'avisos.xls';
+      a.click();
+      e.preventDefault();
+    });
+  }
+</script>

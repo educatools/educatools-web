@@ -9,48 +9,68 @@
 <p>Estes são os seus grupos de ferramentas.</p>
 
 <main>
-    <section class="text-center container-fluid">
-      <div class="row">
-        <div class="col-lg-6 col-md-8 mx-auto container_box">
-            {{#if grupos}}
-                <table class="table striped align-middle table-responsive">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Link</th>
-                            <th>Compartilhado</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each grupos}}
-                        <tr>
-                            <td>{{nome}}</td>
-                            <td><a href="grupos/public/{{link}}" target="_blank">{{link}}</a></td>
-                            <td>{{compartilhado}}</td>
-                            <td class="flex-buttons">
-                                <a href="/grupos/edit/{{_id}}" class="btn btn-float">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="/grupos/{{_id}}" method="POST" id="delete-form">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn red">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            {{else}}
-                <p>Não há grupos de ferramentas cadastrados.</p>
-            {{/if}}
+  <section class="text-center container-fluid">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 mx-auto container_box">
+        <div id="tabela-grupos">
+          {{#if grupos}}
+          <table class="table striped align-middle table-responsive">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Link</th>
+                <th>Compartilhado</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each grupos}}
+              <tr>
+                <td>{{nome}}</td>
+                <td><a href="grupos/public/{{link}}" target="_blank">{{link}}</a></td>
+                <td>{{compartilhado}}</td>
+                <td class="flex-buttons">
+                  <a href="/grupos/edit/{{_id}}" class="btn btn-float">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <form action="/grupos/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <p>Não há grupos de ferramentas cadastrados.</p>
+          {{/if}}
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm my-2 filter-button" id="exportar">Exportar dados</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 </main>
 
 <a href="/grupos/add" class="add-btn-float">
-    <i class="fa fa-plus fbtn-float"></i>
+  <i class="fa fa-plus fbtn-float"></i>
 </a>
+
+<script>
+  window.onload = function () {
+    $("#exportar").click(function (e) {
+      const a = document.createElement('a');
+      const dataType = 'data:application/vnd.ms-excel';
+      const tableDiv = document.getElementById('tabela-grupos');
+      const tableHTML = tableDiv.outerHTML.replace(/ /g, '%20');
+      a.href = dataType + ', ' + tableHTML;
+      a.download = 'grupos.xls';
+      a.click();
+      e.preventDefault();
+    });
+  }
+</script>

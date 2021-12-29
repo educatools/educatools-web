@@ -9,46 +9,61 @@
 <p>Estas são as suas ferramentas educacionais favoritas.</p>
 
 <main>
-    <section class="py-2 text-center container-fluid">
-        <div class="row">
-            <div class="col-lg-6 col-md-8 mx-auto container_box">
-                <div id="tabelaFavoritos">
-                    {{#if ferramentas}}
-                    <table class="table striped align-middle table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Acesso</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each ferramentas}}
-                            <tr>
-                                <td>{{nome}}</td>
-                                <td>
-                                  <a href={{url}} target="blank">{{url}}</a>
-                                </td>
-                                <td class="flex-buttons">
-                                    <form action="/favoritos/{{_id}}" method="POST" id="delete-form">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn red">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                    {{else}}
-                        <p>Não há nenhum favorito.</p>
-                    {{/if}}
-                </div>
-                <div>
-                    <button class="btn btn-primary btn-sm my-2 filter-button" id="gerarExcel">Gerar Excel</button>
-                </div>
-            </div>
+  <section class="py-2 text-center container-fluid">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 mx-auto container_box">
+        <div id="tabela-favoritos">
+          {{#if ferramentas}}
+          <table class="table striped align-middle table-responsive">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Acesso</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each ferramentas}}
+              <tr>
+                <td>{{nome}}</td>
+                <td>
+                  <a href={{url}} target="blank">{{url}}</a>
+                </td>
+                <td class="flex-buttons">
+                  <form action="/favoritos/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <p>Não há nenhum favorito.</p>
+          {{/if}}
         </div>
-    </section>
+        <div>
+          <button class="btn btn-primary btn-sm my-2 filter-button" id="exportar">Exportar dados</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<script>
+  window.onload = function () {
+    $("#exportar").click(function (e) {
+      const a = document.createElement('a');
+      const dataType = 'data:application/vnd.ms-excel';
+      const tableDiv = document.getElementById('tabela-favoritos');
+      const tableHTML = tableDiv.outerHTML.replace(/ /g, '%20');
+      a.href = dataType + ', ' + tableHTML;
+      a.download = 'favoritos.xls';
+      a.click();
+      e.preventDefault();
+    });
+  }
+</script>
