@@ -20,6 +20,7 @@ if (!isProducao()) {
 
 // Configurações de login
 require('./config/local_passport')(passport);
+require('./config/google_passport')(passport);
 
 async function conectaBancoDedados() {
     await connectDB();

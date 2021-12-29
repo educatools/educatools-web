@@ -138,11 +138,15 @@ const GerenciadorFerramentas = {
 
   async recuperaTodasFerramentasFavoritas(usuarioId) {
     try {
-      const {ferramentas} = await Favorito.findOne({usuarioId}).lean();
       const ferramentasFavoritas = [];
-      for(ferramentaId of ferramentas) {
-        const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(ferramentaId);
-        ferramentasFavoritas.push(ferramenta);
+      const favorito = await Favorito.findOne({usuarioId}).lean();
+      
+      if(favorito) {
+        const {ferramentas} = favorito;
+        for(ferramentaId of ferramentas) {
+          const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(ferramentaId);
+          ferramentasFavoritas.push(ferramenta);
+        }
       }
       
       return ferramentasFavoritas;

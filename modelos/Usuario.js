@@ -3,11 +3,9 @@ const mongoose = require('mongoose');
 const UsuarioSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
   },
   senha: {
     type: String,
-    required: true,
   },
   nome: {
     type: String,
@@ -17,6 +15,9 @@ const UsuarioSchema = new mongoose.Schema({
     type: String,
     default: 'usuario',
     enum: ['admin', 'usuario']
+  },
+  googleId: {
+    type: String,
   },
   criadoEm: {
     type: Date,

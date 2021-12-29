@@ -16,6 +16,17 @@ router.post('/', (req, res, next) => {
     })(req, res, next);
 });
 
+router.get('/google', passport.authenticate('google', { 
+    scope: ['profile'] 
+}));
+
+router.get('/google/callback', passport.authenticate('google', { 
+    failureRedirect: '/' 
+}), (req, res) => {
+    res.redirect('/dashboard');
+  }
+);
+
 router.post('/criar', async (req, res) => {
     const {nome, email, senha} = req.body;
     try {

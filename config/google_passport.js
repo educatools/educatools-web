@@ -1,6 +1,5 @@
-const GoogleStrategy = require('passport-google-oauth20').Strategy
-const mongoose = require('mongoose')
-const User = require('../modelos/User')
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const Usuario = require('../modelos/Usuario');
 
 module.exports = function (passport) {
   passport.use(
@@ -8,25 +7,24 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/auth/google/callback',
+        callbackURL: '/login/google/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
-        const newUser = {
+
+        console.log("profile", profile);
+
+        const novoUsuario = {
           googleId: profile.id,
-          displayName: profile.displayName,
-          firstName: profile.name.givenName,
-          lastName: profile.name.familyName,
-          image: profile.photos[0].value,
+          nome: profile.displayName
         }
 
         try {
-          let user = await User.findOne({ googleId: profile.id })
-
-          if (user) {
-            done(null, user)
+          let usuario = await Usuario.findOne({ googleId: profile.id })
+          if (usuario) {
+            done(null, usuario);
           } else {
-            user = await User.create(newUser)
-            done(null, user)
+            usuario = await Usuario.create(novoUsuario)
+            done(null, usuario)
           }
         } catch (err) {
           console.error(err)
