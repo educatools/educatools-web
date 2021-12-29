@@ -1,6 +1,8 @@
 const Usuario = require('../modelos/Usuario');
 const Ferramenta = require('../modelos/Ferramenta');
 const Grupo = require('../modelos/Grupo');
+const Favorito = require('../modelos/Favorito');
+const Comentario = require('../modelos/Comentario');
 
 const GerenciadorEstatisticas = {
 
@@ -87,6 +89,26 @@ const GerenciadorEstatisticas = {
     } catch (err) {
       console.error(err);
       throw new Error("Erro ao tentar recuperar dados sobre grupos criados.");
+    }
+  },
+
+  async recuperaQuantidadesDasEntidadesNoPeriodo(dataInicio, dataFim) {
+    const dados = [];
+    const filtro = {
+      criadoEm: {
+        $gte: new Date(dataInicio),
+        $lte: new Date(dataFim)
+      }
+    }
+    try {
+      dados.push({ _id: "ferramentas", count: await Ferramenta.find(filtro).count() });
+      dados.push({ _id: "favoritos", count: await Favorito.find(filtro).count() });
+      dados.push({ _id: "comentarios", count: await Favorito.find(filtro).count() });
+
+      return dados;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Erro ao tentar recuperar dados da relação de ferramentas e comentários.");
     }
   }
 

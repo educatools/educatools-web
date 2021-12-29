@@ -30,7 +30,7 @@
 <main>
   <div id="filtros" class="container-fluid">
     <h3>Filtro por data</h3>
-    <p>Por padrão, são exibidos os dados dos últimos 30 dias.</p>
+    <p>Por padrão, são exibidos os dados dos últimos <strong>30 dias</strong>.</p>
     <div class="row">
       <div class="form-floating col-sm-12 col-md-4">
         <input id="data-inicio" class="form-control data" placeholder="-">
@@ -67,6 +67,11 @@
     <div class="grafico">
       <canvas id="grafico-grupos"></canvas>
     </div>
+
+     <!-- Gráfico Contagem -->
+    <div class="grafico">
+      <canvas id="grafico-contagem"></canvas>
+    </div>
   </div>
 </main>
 
@@ -83,7 +88,9 @@
     document.getElementById("btn-filtrar").addEventListener('click', () => {
       const dataInicio = document.getElementById('data-inicio').value;
       const dataFim = document.getElementById('data-fim').value;
-      constroiOuAtualizaGraficos(dataInicio, dataFim);
+
+      if(!dataInicio || !dataFim) alert("Selecione as datas de início e fim.")
+      else constroiOuAtualizaGraficos(dataInicio, dataFim);
     });
 
     adicionaDatePickerBootstrapNaPagina();
@@ -117,16 +124,19 @@
 
   function constroiOuAtualizaGraficos(dataInicio, dataFim) {
     // usuários
-    constroiGrafico("grafico-usuarios", "/estatisticas/usuarios", dataInicio, dataFim, "Usuários", "Usuários criados");
+    constroiGrafico("grafico-usuarios", "bar", "/estatisticas/usuarios", dataInicio, dataFim, "Usuários", "Usuários criados");
 
     // ferramentas
-    constroiGrafico("grafico-ferramentas", "estatisticas/ferramentas", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas");
+    constroiGrafico("grafico-ferramentas", "bar", "estatisticas/ferramentas", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas (por ciclo)");
 
     // grupos
-    constroiGrafico("grafico-grupos", "estatisticas/grupos", dataInicio, dataFim, "Grupos", "Grupos criados (compartilhado x não compartilhado)");
+    constroiGrafico("grafico-grupos", "bar", "estatisticas/grupos", dataInicio, dataFim, "Grupos", "Grupos criados (compartilhado x não compartilhado)");
 
     // ferramentas (por status)
-    constroiGrafico("grafico-ferramentas-status", "estatisticas/ferramentas-status", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas (por status)");
+    constroiGrafico("grafico-ferramentas-status", "bar", "estatisticas/ferramentas-status", dataInicio, dataFim, "Ferramentas", "Ferramentas criadas (por status)");
+
+     // contagem 
+    constroiGrafico("grafico-contagem", "polarArea", "estatisticas/contagem", dataInicio, dataFim, "Contagem", "Relação de ferramentas, comentários e favoritos");
   }
 
   function filtrosDeDatasUltimos30Dias() {
@@ -150,7 +160,7 @@
     }
   }
 
-  function constroiGrafico(id, url, dataInicio, dataFim, label, texto) {
+  function constroiGrafico(id, tipo, url, dataInicio, dataFim, label, texto) {
     $.ajax({
       url: `${url}/${dataInicio}/${dataFim}`,
       success: dados => {
@@ -164,7 +174,7 @@
         
         const ctx = document.getElementById(id);
         const grafico = new Chart(ctx, {
-          type: 'bar',
+          type: tipo,
           data: {
             labels,
             datasets: [{
@@ -173,7 +183,9 @@
               backgroundColor: [
                 'rgb(255, 99, 132)', 
                 'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
+                'rgb(255, 205, 86)',
+                'rgb(201, 203, 207)',
+                'rgb(54, 162, 235)'
               ]
             }]
           },

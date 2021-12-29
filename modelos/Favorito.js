@@ -8,6 +8,10 @@ const FavoritoSchema = mongoose.Schema({
   ferramentas: [{
     type: String,
   }],
+  criadoEm: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model('Favorito', FavoritoSchema);

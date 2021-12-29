@@ -10,10 +10,6 @@ router.get('/', ensureAdmin, (req, res) => {
 
 router.get('/usuarios/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
   const {dataInicio, dataFim} = req.params;
-
-  console.log("data de início", dataInicio);
-  console.log("data de término", dataFim);
-  
   try {
     const dadosUsuarios = await GerenciadorEstatisticas.recuperaQuantidadeUsuariosCriadosNoPeriodoPorTipo(dataInicio, dataFim);
     res.send(dadosUsuarios);
@@ -25,10 +21,6 @@ router.get('/usuarios/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
 
 router.get('/ferramentas/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
   const {dataInicio, dataFim} = req.params;
-
-  console.log("data de início", dataInicio);
-  console.log("data de término", dataFim);
-  
   try {
     const dadosFerramentas = await GerenciadorEstatisticas.recuperaQuantidadeFerramentasCriadasNoPeriodoPorCiclo(dataInicio, dataFim);
     res.send(dadosFerramentas);
@@ -40,10 +32,6 @@ router.get('/ferramentas/:dataInicio/:dataFim', ensureAdmin, async (req, res) =>
 
 router.get('/ferramentas-status/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
   const {dataInicio, dataFim} = req.params;
-
-  console.log("data de início", dataInicio);
-  console.log("data de término", dataFim);
-  
   try {
     const dadosFerramentas = await GerenciadorEstatisticas.recuperaQuantidadeFerramentasCriadasNoPeriodoPorStatus(dataInicio, dataFim);
     res.send(dadosFerramentas);
@@ -55,13 +43,20 @@ router.get('/ferramentas-status/:dataInicio/:dataFim', ensureAdmin, async (req, 
 
 router.get('/grupos/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
   const {dataInicio, dataFim} = req.params;
-
-  // console.log("data de início", dataInicio);
-  // console.log("data de término", dataFim);
-  
   try {
     const dadosGrupos = await GerenciadorEstatisticas.recuperaQuantidadeGruposCriadosNoPeriodo(dataInicio, dataFim);
     res.send(dadosGrupos);
+  } catch(err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
+router.get('/contagem/:dataInicio/:dataFim', ensureAdmin, async (req, res) => {
+  const {dataInicio, dataFim} = req.params;
+  try {
+    const dados = await GerenciadorEstatisticas.recuperaQuantidadesDasEntidadesNoPeriodo(dataInicio, dataFim);
+    res.send(dados);
   } catch(err) {
     console.error(err);
     res.sendStatus(500);
