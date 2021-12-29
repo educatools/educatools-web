@@ -7,7 +7,7 @@ router.get('/', ensureAuth, async(req, res) => {
     if(tipoUsuario == "admin") {
         res.render('dashboard');
     } else {
-        res.render('dados');
+        res.render('dashboard-simples');
     }
 
 });
