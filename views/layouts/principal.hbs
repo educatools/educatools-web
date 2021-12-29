@@ -1,48 +1,5 @@
 <main role="main">
-  
-  <!-- Modal da ferramenta -->
-  <div id="modalFerramenta" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
-    aria-labelledby="modalFerramenta" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Nome da Ferramenta</h5>
-          <button id="btn-fecharvideo" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3" id="modal-ferramenta-descricao">
-            <h5><i class="fas fa-info-circle"></i> Descrição</h5>
-            <p>-</p>
-          </div>
-          <div class="mb-3" id="modal-ferramenta-ciclos">
-            <h5><i class="fas fa-circle-notch"></i> Ciclo</h5>
-            <p>-</p>
-          </div>
-          <div class="mb-3" id="modal-ferramenta-video">
-            <h5><i class="far fa-question-circle"></i> Como usar?</h5>
-            <p>O vídeo abaixo te dará dicas importantes sobre a melhor forma de usar essa ferramenta na sua aula!</p>
-          </div>
-          <div class="mb-3">
-            <iframe id="modal-ferramenta-iframe-youtube" width="560" height="315" src="https://www.youtube.com/embed/" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div class="mb-3" id="modal-ferramenta-usuario">
-            <h5><i class="fas fa-user"></i> Recomendação</h5>
-            <p>-</p>
-          </div>
-        </div>
-        <div class="modal-footer">
-          {{#if user}}
-          <button id="modal-ferramenta-favoritar" favorito="" class="btn btn-warning" href="" role="button">
-            Favoritar
-          </button>
-          {{/if}}
-          <a id="modal-ferramenta-url" class="btn btn-primary" href="#" target="_blank" role="button">
-            <i class="fas fa-arrow-right"></i> Acessar
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="avisos">
     {{#if avisos}}
       {{#each avisos}}
         <div class="alert alert-info d-flex align-items-center alert-dismissible fade show" role="alert">
@@ -54,6 +11,7 @@
         </div>
       {{/each}}
     {{/if}}
+  </div>
   <section class="jumbotron text-center">
     <div class="container">
       <h1 class="jumbotron-heading">Ferramentas Educacionais</h1>

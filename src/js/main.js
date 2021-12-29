@@ -2,180 +2,79 @@ const URL_API = window.location.href.substr(0, window.location.href.length - 1);
 let FERRAMENTA_SELECIONADA = null;
 
 $(document).ready(() => {
-    
-    // somente na página pública
-    if(location.pathname === "/") {
-        mostraTodasFerramentas();
-        configuraFiltrosDeBusca();
-        configuraDisparosDoModal();
-        addListenerParaFavoritar();
-        
-        // faz com que o vídeo ocupe o espaço todo disponível no modal
-        $("#modalFerramenta").fitVids();
-    }
-
+  // somente na página pública
+  if (location.pathname === "/") {
+    mostraTodasFerramentas();
+    configuraFiltrosDeBusca();
+    mostrarAvisos();
+  }
 });
 
-function addListenerParaFavoritar() {
-    $("#modal-ferramenta-favoritar").click(() => {
-        const ferramentaId = $("#modal-ferramenta-favoritar").attr("favorito");
-        $.ajax({
-            url: `${URL_API}/favoritos/favoritar/${ferramentaId}`,
-            success: () => {
-                const btnFavoritar = $("#modal-ferramenta-favoritar");
-                if(btnFavoritar.text() === "Favoritar") {
-                    btnFavoritar.text("Desfavoritar");
-                } else {
-                    btnFavoritar.text("Favoritar");
-                }
-            },
-            error: () => alert("Ops! Aconteceu um problema ao favoritar essa ferramenta!"),
-        });
-    })
-}
-
-function configuraDisparosDoModal() {
-    const modalFerramenta = document.getElementById('modalFerramenta');
-
-    // HIDE
-    modalFerramenta.addEventListener("hide.bs.modal", (e) => {
-        const video = $('#modal-ferramenta-iframe-youtube').attr("src");
-        $('#modal-ferramenta-iframe-youtube').attr("src", "");
-        $('#modal-ferramenta-iframe-youtube').attr("src", video);
-
-        // botão de favorito
-        $("#modal-ferramenta-favoritar").hide();
-    });
-
-    // SHOW
-    modalFerramenta.addEventListener('show.bs.modal', function(e) {
-        //FIXME: Alterar callback para async/await ou pelo menos Promises
-        buscaDadosFerramenta(FERRAMENTA_SELECIONADA, (ferramenta) => {
-
-            // Atualiza o modal de acordo com o conteúdo vindo da requisição AJAX
-            const nome = modalFerramenta.querySelector('.modal-title');
-            const descricao = modalFerramenta.querySelector('#modal-ferramenta-descricao p');
-            const ciclo = modalFerramenta.querySelector('#modal-ferramenta-ciclos p');
-            const url = modalFerramenta.querySelector("#modal-ferramenta-url");
-            const usuario = modalFerramenta.querySelector("#modal-ferramenta-usuario p");
-            const iframe = modalFerramenta.querySelector("#modal-ferramenta-iframe-youtube");
-            const id = modalFerramenta.querySelector("#modal-ferramenta-favoritar");
-
-            if(id) id.setAttribute("favorito", ferramenta._id);
-            nome.textContent = ferramenta.nome;
-            descricao.textContent = ferramenta.descricao;
-            url.setAttribute("href", ferramenta.url);
-            usuario.textContent = `Está foi uma recomendação do(a) ${ferramenta.usuario}. Aproveite!`;
-            ciclo.textContent = recomendacaoCiclosModal(ferramenta.ciclos);
-            iframe.setAttribute("src", `https://www.youtube.com/embed/${ferramenta.video}`);
-        });
-
-        // altera o botão de favoritar
-        isFerramentaFavorita(FERRAMENTA_SELECIONADA);
-    })
-}
-
-function isFerramentaFavorita(ferramentaId) {
-    console.log("FERRAMENTAID", ferramentaId);
-    $.ajax({
-        url: `${URL_API}/favoritos/checaFavorito/${ferramentaId}`,
-        success: function(dados) {
-            const botaoFavoritar = $("#modal-ferramenta-favoritar");
-            const isFavorito = dados.favorito;
-            if(isFavorito) {
-                botaoFavoritar.text("Desfavoritar");
-            } else {
-                botaoFavoritar.text("Favoritar");
-            }
-
-            botaoFavoritar.show();
-        }
-    })
-}
-
-function recomendacaoCiclosModal(ciclos) {
-    switch (ciclos) {
-        case "todos": return "Ideal para todos os ciclos de aprendizagem";
-        case "infantil": return "Ideal para ser usado no ensino infatil";
-        case "fundamental 1": return "Ideal para ser usado no ensino fundamental 1 (1° ao 5° anos)";
-        case "fundamental 2": return "Ideal para ser usado no ensino fundamental 2 (6° ao 9° anos)";
-        case "médio": return "Ideal para ser usado no ensino médio";
-        case "superior": return "Ideal para ser usado no ensino superior (graduação ou pós)";
-    }
-}
-
-function buscaDadosFerramenta(id, callback) {
-    $.ajax({
-        url: `${URL_API}/ferramentas/detalhes/${id}`,
-        success: (ferramenta) => callback(ferramenta)
-    });
-}
-
 function mostraTodasFerramentas() {
-    $.ajax({
-        url: `${URL_API}/ferramentas/all`,
-        success: function(ferramentas) {
-            let ferramentasHTML = [];
-            if (ferramentas) {
-                ferramentasHTML = ferramentas.map(({ _id, url, data, nome, descricao, ciclos, usuario }) => {
-                    return new Ferramenta(_id, url, data, nome, descricao, ciclos, usuario);
-                });
-            }
+  $.ajax({
+    url: `${URL_API}/ferramentas/all`,
+    success: function (ferramentas) {
+      let ferramentasHTML = [];
+      if (ferramentas) {
+        ferramentasHTML = ferramentas.map(({ _id, url, data, nome, descricao, ciclos, usuario }) => {
+          return new Ferramenta(_id, url, data, nome, descricao, ciclos, usuario);
+        });
+      }
 
-            $('#ferramentas').html(''); //remove o loading
+      $('#ferramentas').html(''); //remove o loading
 
-            // lista as ferramentas no HTML
-            ferramentasHTML.forEach(ferramenta => {
-                $('#ferramentas').append(ferramenta.montaFerramentaHTML());
-            });
-        }
-    });
+      // lista as ferramentas no HTML
+      ferramentasHTML.forEach(ferramenta => {
+        $('#ferramentas').append(ferramenta.montaFerramentaHTML());
+      });
+    }
+  });
 }
 
 function configuraFiltrosDeBusca() {
-    // shows or hides the recommendations based on the user search
-    $("#searchbox").on("keyup", function() {
-        const searchTerm = $(this).val().toLowerCase();
-        $(".ferramenta").filter(function() {
-            const element = $(this);
-            const title = element.find(".card-title").text().toLowerCase();
-            const description = element.find(".card-body").text().toLowerCase();
+  // shows or hides the recommendations based on the user search
+  $("#searchbox").on("keyup", function () {
+    const searchTerm = $(this).val().toLowerCase();
+    $(".ferramenta").filter(function () {
+      const element = $(this);
+      const title = element.find(".card-title").text().toLowerCase();
+      const description = element.find(".card-body").text().toLowerCase();
 
-            // looks up on the title and description
-            if (title.indexOf(searchTerm) > -1 || description.indexOf(searchTerm) > -1) {
-                element.show();
-            } else {
-                element.hide();
-            }
-        });
-
-        // if there are no results, then shows a warning on the screen
-        const results = $(".ferramenta:visible").length;
-        const noResultsWarning = $("#warning:visible").length;
-        if (results) $("#warning").hide();
-        if (!results && !noResultsWarning) {
-            $("#warning").show();
-        }
+      // looks up on the title and description
+      if (title.indexOf(searchTerm) > -1 || description.indexOf(searchTerm) > -1) {
+        element.show();
+      } else {
+        element.hide();
+      }
     });
+
+    // if there are no results, then shows a warning on the screen
+    const results = $(".ferramenta:visible").length;
+    const noResultsWarning = $("#warning:visible").length;
+    if (results) $("#warning").hide();
+    if (!results && !noResultsWarning) {
+      $("#warning").show();
+    }
+  });
 }
 
 function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
-    this.id = id;
-    this.url = url;
-    this.data = data;
-    this.nome = nome;
-    this.descricao = descricao;
-    this.ciclos = ciclos || 'Todos';
-    this.usuario = usuario;
+  this.id = id;
+  this.url = url;
+  this.data = data;
+  this.nome = nome;
+  this.descricao = descricao;
+  this.ciclos = ciclos || 'Todos';
+  this.usuario = usuario;
 
-    this.montaFerramentaHTML = function() {
-        const hostname = new URL(this.url).hostname;
-        const faviconSize = 15;
-        // FIXME: api depreciada
-        // const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
-        const ferramentaId = this.id;
+  this.montaFerramentaHTML = function () {
+    const hostname = new URL(this.url).hostname;
+    const faviconSize = 15;
+    // FIXME: api depreciada
+    // const favicon = `https://api.faviconkit.com/${hostname}/${faviconSize}`;
+    const ferramentaId = this.id;
 
-        return `
+    return `
       <div onclick="abreDetalhes('${ferramentaId}')" class="col-sm-12 ferramenta filter ${this.__montaCategoriaClasse()}">
         <a href="javascript:void(0);" rel="noopener noreferrer" class="custom-card">
           <div class="card sm-12 box-shadow">
@@ -194,64 +93,64 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
         </a>
         </div>
       `
-    };
+  };
 
-    this.__descricaoResumida = function() {
-        if(this.descricao.length > 250) {
-            return this.descricao.substr(0, 250) + "...";
-        } else {
-            return this.descricao;
-        }
-    };
+  this.__descricaoResumida = function () {
+    if (this.descricao.length > 250) {
+      return this.descricao.substr(0, 250) + "...";
+    } else {
+      return this.descricao;
+    }
+  };
 
-    this.__montaCategoriaClasse = function() {
-        const ciclos = new Map();
-        ciclos.set('infantil', 'infantil');
-        ciclos.set('fundamental 1', 'fundamental-1');
-        ciclos.set('fundamental 2', 'fundamental-2');
-        ciclos.set('médio', 'médio');
-        ciclos.set('superior', 'superior');
-        ciclos.set('todos', 'todos');
+  this.__montaCategoriaClasse = function () {
+    const ciclos = new Map();
+    ciclos.set('infantil', 'infantil');
+    ciclos.set('fundamental 1', 'fundamental-1');
+    ciclos.set('fundamental 2', 'fundamental-2');
+    ciclos.set('médio', 'médio');
+    ciclos.set('superior', 'superior');
+    ciclos.set('todos', 'todos');
 
-        return ciclos.get(this.ciclos);
-    };
+    return ciclos.get(this.ciclos);
+  };
 
-    this.__montaBadges = function() {
-        const badges = new Map();
-        badges.set('infantil', { texto: 'Infantil', tipo: 'success' });
-        badges.set('fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
-        badges.set('fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
-        badges.set('médio', { texto: 'Ensino Médio', tipo: 'warning' });
-        badges.set('superior', { texto: 'Ensino Superior', tipo: 'info' });
-        badges.set('todos', { texto: 'Todos', tipo: 'secondary' });
+  this.__montaBadges = function () {
+    const badges = new Map();
+    badges.set('infantil', { texto: 'Infantil', tipo: 'success' });
+    badges.set('fundamental 1', { texto: 'Ensino Fundamental 1', tipo: 'primary' });
+    badges.set('fundamental 2', { texto: 'Ensino Fundamental 2', tipo: 'danger' });
+    badges.set('médio', { texto: 'Ensino Médio', tipo: 'warning' });
+    badges.set('superior', { texto: 'Ensino Superior', tipo: 'info' });
+    badges.set('todos', { texto: 'Todos', tipo: 'secondary' });
 
-        const { texto, tipo } = badges.get(this.ciclos);
-        return `<span class="badge bg-${tipo}" title="${this.ciclos}">${texto}</span>`;
-    };
+    const { texto, tipo } = badges.get(this.ciclos);
+    return `<span class="badge bg-${tipo}" title="${this.ciclos}">${texto}</span>`;
+  };
 }
 
 function abreDetalhes(ferramentaId) {
-    FERRAMENTA_SELECIONADA = ferramentaId;
-    // $('#modalFerramenta').modal('show');
-    window.location.href = `/detalhes/${ferramentaId}`;
+  FERRAMENTA_SELECIONADA = ferramentaId;
+  // $('#modalFerramenta').modal('show');
+  window.location.href = `/detalhes/${ferramentaId}`;
 }
 
 
 // BOTOES DE FILTRO
-$(".filter-button").click(function() {
-    var value = $(this).attr('data-filter');
-    if (value == "all") {
-        //$('.filter').removeClass('hidden');
-        $('.filter').show('1000');
-    } else {
-        //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
-        //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
-        $(".filter").not('.' + value).hide('3000');
-        $('.filter').filter('.' + value).show('3000');
-    }
+$(".filter-button").click(function () {
+  var value = $(this).attr('data-filter');
+  if (value == "all") {
+    //$('.filter').removeClass('hidden');
+    $('.filter').show('1000');
+  } else {
+    //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
+    //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
+    $(".filter").not('.' + value).hide('3000');
+    $('.filter').filter('.' + value).show('3000');
+  }
 });
 
 if ($(".filter-button").removeClass("active")) {
-    $(this).removeClass("active");
+  $(this).removeClass("active");
 }
 $(this).addClass("active");
