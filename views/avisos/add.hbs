@@ -1,0 +1,89 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="/avisos">Avisos</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Criar aviso</li>
+  </ol>
+</nav>
+
+<h1>Avisos</h1>
+<p>Preencha os dados abaixo para criar um novo aviso.</p>
+
+<main>
+    <section class="container-fluid">
+        <div class="col-lg-6 col-md-8 mx-auto container_box">
+          <form id="formulario-aviso" action="/avisos" method="POST">
+            
+            <!-- Data Inicial -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <input id="data-inicio" name="dataInicial" class="form-control data" placeholder="-">
+              <label for="data-inicio">Data inicial</label>
+              <small id="data-inicio-help" class="form-text text-muted">Data inicial para a validade do aviso</small>
+            </div>
+
+            <!-- Data Final -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <input id="data-final" name="dataFinal" class="form-control data" placeholder="-">
+              <label for="data-final">Data final</label>
+              <small id="data-final-help" class="form-text text-muted">Prazo de validade do aviso</small>
+            </div>
+
+            <!-- Mensagem -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="mensagem">Mensagem</label>
+              <textarea type="text" class="form-control" id="mensagem" name="mensagem" aria-describedby="mensagem-help" placeholder="mensagem" rows="5"></textarea>
+              <small id="mensagem-help" class="form-text text-muted">A mensagem que será exibida aos usuários na tela inicial</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+    </section>
+</main>
+
+<script>
+window.onload = () => {
+  inicializaCamposData();
+}
+
+// FIXME: há algum problema com o carregamento desta biblioteca. ela não reconhece o jquery e então quebra.
+function inicializaCamposData() {
+  if(!$ && !jQuery) {
+    setTimeout(() => {
+      inicializaCamposData();
+    }, 1000);
+  } else {
+    adicionaDatePickerBootstrapNaPagina();
+  }
+}
+
+function adicionaDatePickerBootstrapNaPagina() {
+  // datepicker
+  const dp = document.createElement('script');
+  dp.type = 'text/javascript';
+  dp.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js");
+  document.body.appendChild(dp);
+
+  // datepicker pt-br
+  const dpPTBR = document.createElement('script');
+  dpPTBR.type = 'text/javascript';
+  dpPTBR.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js');
+  document.body.appendChild(dpPTBR);
+
+  setTimeout(() => {
+    $('.data').datepicker({
+      format: "yyyy-mm-dd",
+      maxViewMode: 1,
+      clearBtn: true,
+      language: "pt-BR",
+      multidate: false,
+      todayHighlight: true,
+      orientation: "bottom auto"
+    });
+  }, 2000);
+
+}
+
+</script>
+
+  

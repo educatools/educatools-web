@@ -1,41 +1,39 @@
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Ferramentas</li>
+    <li class="breadcrumb-item active" aria-current="page">Avisos</li>
   </ol>
 </nav>
 
-<h1>Ferramentas</h1>
-<p>Estas são as ferramentas cadastradas.</p>
+<h1>Avisos</h1>
+<p>Estas são os avisos cadastrados.</p>
 
 <main>
-    <section class="text-center container-fluid">
+  <section class="text-center container-fluid">
       <div class="row">
         <div class="col-lg-6 col-md-8 mx-auto container_box">
-            {{#if ferramentas}}
+            {{#if avisos}}
                 <table class="table striped align-middle table-responsive">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Status</th>
-                            <th>Usuário</th>
-                            <th>Criado em</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Mensagem</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each ferramentas}}
+                        {{#each avisos}}
                         <tr>
-                            <td>{{nome}}</td>
-                            <td><span class="dash-status">{{status}}</span></td>
-                            <td><span class="dash-status">{{usuario}}</span></td>
-                            <td>{{formatDate data 'DD/MM/yyyy'}}</td>
+                            <td>{{formatDate dataInicial 'DD/MM/yyyy'}}</td>
+                            <td>{{formatDate dataFinal 'DD/MM/yyyy'}}</td>
+                            <td>{{mensagem}}</td>
 
                             <td class="flex-buttons">
-                                <a href="/ferramentas/edit/{{_id}}" class="btn btn-float">
+                                <a href="/avisos/edit/{{_id}}" class="btn btn-float">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="/ferramentas/{{_id}}" method="POST" id="delete-form">
+                                <form action="/avisos/{{_id}}" method="POST" id="delete-form">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn red">
                                         <i class="fas fa-trash"></i>
@@ -47,13 +45,14 @@
                     </tbody>
                 </table>
             {{else}}
-                <p>Não há ferramentas cadastradas.</p>
+                <p>Não há avisos.</p>
             {{/if}}
         </div>
       </div>
     </section>
+
 </main>
 
-<a href="/ferramentas/add" class="add-btn-float">
+<a href="/avisos/add" class="add-btn-float">
     <i class="fa fa-plus fbtn-float"></i>
 </a>

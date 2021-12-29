@@ -5,9 +5,11 @@ const { ensureAuth } = require('../middleware/auth');
 const GerenciadorFerramentas = require('../servicos/GerenciadorFerramentas');
 const GerenciadorComentarios = require('../servicos/GerenciadorComentarios');
 const GerenciadorUsuarios = require('../servicos/GerenciadorUsuarios');
+const GerenciadorAvisos = require('../servicos/GerenciadorAvisos');
 
-router.get('/', (req, res) => {
-  res.render('layouts/principal');
+router.get('/', async (req, res) => {
+  const avisos = await GerenciadorAvisos.recuperaAvisosValidos(new Date());
+  res.render('layouts/principal', {avisos});
 });
 
 router.get('/detalhes/:id', async (req, res) => {
