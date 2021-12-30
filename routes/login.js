@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 
 const GerenciadorUsuarios = require("../servicos/GerenciadorUsuarios");
+const GerenciadorPerfis = require('../servicos/GerenciadorPerfis');
 
 router.get('/', (req, res) => {
     res.render('login');
@@ -30,7 +31,8 @@ router.get('/google/callback', passport.authenticate('google', {
 router.post('/criar', async (req, res) => {
     const {nome, email, senha} = req.body;
     try {
-        await GerenciadorUsuarios.criaUsuario(nome, email, 'usuario' , senha);
+        const { _id:usuarioId, nome: nomeExibicao } = await GerenciadorUsuarios.criaUsuario(nome, email, 'usuario' , senha);
+        await GerenciadorPerfis.criaNovoPerfil(usuarioId, nomeExibicao);
         res.sendStatus(200);
     } catch(e) {
         console.log("Erro na criação do usuário via tela de cadastro", e);

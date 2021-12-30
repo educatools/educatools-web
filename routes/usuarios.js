@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { ensureAuth, ensureGuest } = require('../middleware/auth');
+const { ensureAdmin } = require('../middleware/auth');
 
 const GerenciadorUsuarios = require('../servicos/GerenciadorUsuarios');
+const GerenciadorPerfis = require('../servicos/GerenciadorPerfis');
 
-router.get('/', ensureAuth, async (req, res) => {
+router.get('/', ensureAdmin, async (req, res) => {
   try {
     const usuarios = await GerenciadorUsuarios.recuperaTodosUsuarios();
     res.render('usuarios', {
@@ -16,10 +17,11 @@ router.get('/', ensureAuth, async (req, res) => {
   }
 });
 
-router.post('/', ensureAuth, async (req, res) => {
+router.post('/', ensureAdmin, async (req, res) => {
   try {
     const { nome, email, tipo, senha } = req.body;
-    await GerenciadorUsuarios.criaUsuario(nome, email, tipo, senha);
+    const {_id: usuarioId, nome: nomeExibicao} = await GerenciadorUsuarios.criaUsuario(nome, email, tipo, senha);
+    await GerenciadorPerfis.criaNovoPerfil(usuarioId, nomeExibicao);
     res.redirect('/dashboard');
   } catch (err) {
     console.error(err);
@@ -27,7 +29,7 @@ router.post('/', ensureAuth, async (req, res) => {
   }
 })
 
-router.put('/:id', ensureAuth, async (req, res) => {
+router.put('/:id', ensureAdmin, async (req, res) => {
   try {
     const id = req.params.id;
     const { nome, email, tipo } = req.body;
@@ -41,7 +43,7 @@ router.put('/:id', ensureAuth, async (req, res) => {
   }
 })
 
-router.delete('/:id', ensureAuth, async (req, res) => {
+router.delete('/:id', ensureAdmin, async (req, res) => {
   try {
     await GerenciadorUsuarios.deletaUsuario(req.params.id);
     res.redirect('/usuarios');
@@ -51,7 +53,7 @@ router.delete('/:id', ensureAuth, async (req, res) => {
   }
 });
 
-router.get('/edit/:id', async (req, res) => {
+router.get('/edit/:id', ensureAdmin, async (req, res) => {
   try {
     const usuario = await GerenciadorUsuarios.recuperaUsuarioPorId(req.params.id);
     if (!usuario) {
@@ -67,7 +69,7 @@ router.get('/edit/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', ensureAdmin, async (req, res) => {
   try {
     const {id} = req.params;
     const {nome, email, tipo} = req.body;
@@ -79,7 +81,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.get('/add', ensureAuth, (req, res) => {
+router.get('/add', ensureAdmin, (req, res) => {
   res.render('usuarios/add');
 });
 

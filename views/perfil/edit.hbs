@@ -1,0 +1,103 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Editar perfil público</li>
+  </ol>
+</nav>
+
+<h1>Perfil</h1>
+<p>Altere os dados do seu perfil público conforme necessário.</p>
+
+<main>
+    <section class="container-fluid">
+        <div class="col-lg-6 col-md-8 mx-auto container_box">
+          <div id="formulario-perfil">
+
+            <input id="id-perfil" type="hidden" value="{{perfil._id}}" />
+            <input type="hidden" name="_method" value="PUT">
+
+            <!-- Nome de exibição -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="nome-exibicao">Nome de exibição</label>
+              <input type="text" class="form-control" id="nome-exibicao" name="nomeexibicao" aria-describedby="nome-exibicao-help" placeholder="nome-exibicao" value="{{perfil.nomeExibicao}}" required>
+              <small id="nome-exibicao-help" class="form-text text-muted">O nome que será usado no seu perfil público e comentários</small>
+            </div>
+            
+            <!-- Minibio -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="minibio">Minibio</label>
+              <textarea type="text" class="form-control" id="minibio" name="minibio" aria-describedby="minibio-help" placeholder="minibio" rows="5">{{perfil.minibio}}</textarea>
+              <small id="minibio-help" class="form-text text-muted">Nos diga um pouco mais sobre você!</small>
+            </div>
+
+            <!-- Instituição -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="instituicao">Instituição</label>
+              <input type="text" class="form-control" id="instituicao" name="instituicao" aria-describedby="instituicao-help" placeholder="instituicao" value="{{perfil.instituicao}}" required>
+              <small id="instituicao-help" class="form-text text-muted">Instituição onde você trabalha ou estuda</small>
+            </div>
+
+            <!-- Profissão -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label for="profissao">Profissão</label>
+              <select id="profissao" class="form-select" name="profissao" aria-describedby="profissao-help" required>
+                {{#select perfil.profissao}}
+                    <option value="educador">educador(a)</option>
+                    <option value="estudante">estudante</option>
+                    <option value="coordenador">coordenador(a)</option>
+                    <option value="diretor">diretor(a)</option>
+                    <option value="outro">outro</option>
+                {{/select}}
+              </select>
+              <small id="tipo-help" class="form-text text-muted">Profissão</small>
+            </div>
+
+            <!-- Mostrar favoritos -->
+            <div class="form-check form-switch" style="margin-bottom: 20px;">
+              <input class="form-check-input" type="checkbox" id="favoritos" {{checked perfil.mostraFavoritos}}>
+              <label class="form-check-label" for="favoritos">Mostrar favoritos</label>
+            </div>
+
+            <!-- Mostrar ferramentas -->
+            <div class="form-check form-switch" style="margin-bottom: 20px;">
+              <input class="form-check-input" type="checkbox" id="ferramentas" {{checked perfil.mostraFerramentas}}>
+              <label class="form-check-label" for="favoritos">Mostrar ferramentas</label>
+            </div>
+
+            <button id="btn-enviar" type="button" class="btn btn-primary">Enviar</button>
+          </div>
+        </div>
+    </section>
+</main>
+
+<script>
+  window.onload = () => {
+
+    document.querySelector("#btn-enviar").addEventListener("click", () => {
+      const idPerfil = document.querySelector("#id-perfil").value;
+
+      $.ajax({
+        url: `/perfil/${idPerfil}`,
+        type: "PUT",
+        data: {
+          nomeExibicao: document.querySelector('#nome-exibicao').value,
+          minibio: document.querySelector("#minibio").value,
+          instituicao: document.querySelector("#instituicao").value,
+          profissao: document.querySelector("#profissao").value,
+          favoritos: document.querySelector("#favoritos").checked,
+          ferramentas: document.querySelector("#ferramentas").checked
+        },
+        success: (resultado) => {
+          alert("Perfil alterado com sucesso!");
+          window.location.href = "/perfil/escolha";
+        }, 
+        error: (err) => {
+          alert("Ops! Não foi possível salvar as suas alterações!");
+          window.location.reload(true);
+        }
+      })
+    });
+
+  }
+
+</script>

@@ -127,6 +127,7 @@ app.use('/favoritos', require('./routes/favoritos'));
 app.use('/grupos', require('./routes/grupos'));
 app.use('/estatisticas', require('./routes/estatisticas'));
 app.use('/avisos', require('./routes/avisos'));
+app.use('/perfil', require('./routes/perfil'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(

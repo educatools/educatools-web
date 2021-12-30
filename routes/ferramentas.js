@@ -3,7 +3,6 @@ const router = express.Router()
 const { ensureAuth, ensureAdmin } = require('../middleware/auth');
 
 const GerenciadorFerramentas = require("../servicos/GerenciadorFerramentas");
-const Ferramenta = require('../modelos/Ferramenta');
 
 router.get('/', ensureAdmin, async (req, res) => {
   try {
@@ -39,22 +38,23 @@ router.get('/edit/:id', async (req, res) => {
 
 // @descrição  Mostra todas as ferramentas cadastradas
 // @rota       GET /ferramentas/all
-router.get('/all', (req, res) => {
-  Ferramenta.find({ status: 'aprovado' }, (err, ferramentas) => {
-    if (!err) res.send(ferramentas);
-    else {
-      console.error(err);
-    }
-  }).sort({ date: 'desc' });
+router.get('/all', async (req, res) => {
+  try {
+    const ferramentas = await GerenciadorFerramentas.recuperaTodasFerramentas({status: "aprovado"});
+    res.send(ferramentas);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 });
 
 // @descrição  Salva uma ferramenta no banco de dados
 // @rota       POST /ferramentas/salvar
 router.post('/', ensureAuth, async (req, res) => {
-  const usuario = req.user.nome;
+  const { _id: usuarioId } = req.user._id;
   const { id, nome, url, ciclos, descricao, video, desenvolvedor } = req.body;
   try {
-    await GerenciadorFerramentas.criaFerramenta(id, url, usuario, nome, descricao, ciclos, video, desenvolvedor);
+    await GerenciadorFerramentas.criaFerramenta(id, url, usuarioId, nome, descricao, ciclos, video, desenvolvedor);
     res.redirect('/ferramentas');
   } catch(err) {
     console.error(err);
@@ -86,20 +86,5 @@ router.delete('/:id', ensureAdmin, async (req, res) => {
       res.render('error/500');
   }
 });
-
-// @desc Retorna os dados de apenas uma ferramenta
-// @rota GET /ferramentas/:id
-
-// FIXME: remover ideia de id e fazer por nome (ou inventar um slug tipo o wordpress)
-router.get('/detalhes/:id', (req, res) => {
-  const {id: ferramentaId} = req.params;
-  Ferramenta.findOne({ _id: ferramentaId }, (err, ferramenta) => {
-    if (!err) {
-      res.send(ferramenta)
-    } else {
-      res.sendStatus(404);
-    }
-  })
-})
 
 module.exports = router;

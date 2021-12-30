@@ -1,0 +1,30 @@
+<h1>Perfil público do usuário</h1>
+
+{{#if dados}}
+  <h3>{{dados.perfil.nomeExibicao}}</h3>
+  <h4>{{dados.perfil.profissao}}</h4>
+  <h5>{{dados.perfil.instituicao}}</h5>
+  <p>{{dados.perfil.minibio}}</p>
+
+  {{#if favoritos}}
+  <h3>Minha ferramentas favoritas são:</h3>
+  <ul>
+    {{#each favoritos}}
+      <li><a href="{{url}}" target="_blank">{{nome}}</a></li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+  {{#if ferramentas}}
+  <h3>Já sugeri as seguintes ferramentas:</h3>
+  <ul>
+    {{#each ferramentas}}
+      <li><a href="{{url}}" target="_blank">{{nome}}</a></li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+{{#else}}
+  <p>Não há nenhum perfil para ser exibido.</p>
+{{/else}}
+{{/if}}

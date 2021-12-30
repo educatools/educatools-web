@@ -86,7 +86,6 @@ function Ferramenta(id, url, data, nome, descricao, ciclos, usuario) {
                   <small class="text-muted">para:&nbsp</small>
                   ${this.__montaBadges()}
                 </div>
-                <small class="text-muted"><b>sugerido por:</b> ${this.usuario}</small>
               </div>
             </div>
           </div>

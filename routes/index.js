@@ -4,8 +4,8 @@ const { ensureAuth } = require('../middleware/auth');
 
 const GerenciadorFerramentas = require('../servicos/GerenciadorFerramentas');
 const GerenciadorComentarios = require('../servicos/GerenciadorComentarios');
-const GerenciadorUsuarios = require('../servicos/GerenciadorUsuarios');
 const GerenciadorAvisos = require('../servicos/GerenciadorAvisos');
+const GerenciadorPerfis = require("../servicos/GerenciadorPerfis");
 
 router.get('/', async (req, res) => {
   const avisos = await GerenciadorAvisos.recuperaAvisosValidos(new Date());
@@ -16,6 +16,11 @@ router.get('/detalhes/:id', async (req, res) => {
   const {id: ferramentaId} = req.params;
   try {
     const ferramenta = await GerenciadorFerramentas.recuperaFerramentaPorId(ferramentaId);
+    
+    // nome de exibição de quem fez a sugestão da ferramenta
+    const perfilUsuarioFerramenta = await GerenciadorPerfis.recuperaPerfilPorUsuario(ferramenta.usuarioId);
+    ferramenta.usuario = perfilUsuarioFerramenta;
+
     const comentarios = await GerenciadorComentarios.recuperaTodosComentariosFerramenta(ferramentaId);
 
     if(req.user) {
@@ -24,9 +29,9 @@ router.get('/detalhes/:id', async (req, res) => {
     }
 
     for(let i = 0; i < comentarios.length; i++) {
-      const {usuarioId} = comentarios[i];
-      const usuario = await GerenciadorUsuarios.recuperaUsuarioPorId(usuarioId);
-      comentarios[i].usuario = usuario.nome;
+      const { usuarioId } = comentarios[i];
+      const perfil = await GerenciadorPerfis.recuperaPerfilPorUsuario(usuarioId);
+      comentarios[i].usuario = perfil.nomeExibicao;
       
       if(req.user) {
         if(usuarioId === req.user.id || req.user.tipo === "admin") {
@@ -35,7 +40,7 @@ router.get('/detalhes/:id', async (req, res) => {
       }
     }
 
-    res.render('detalhes', {ferramenta, comentarios});
+    res.render('detalhes', { ferramenta, comentarios });
   } catch(err) {
     console.error("Erro ao tentar detalhar ferramenta.");
     res.render('error/500', {err});

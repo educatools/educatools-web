@@ -3,9 +3,10 @@ const Favorito = require('../modelos/Favorito');
 
 const GerenciadorFerramentas = {
 
-  async recuperaTodasFerramentas() {
+  async recuperaTodasFerramentas(filtro) {
+    const filtroBusca = filtro ? filtro : {};
     try {
-      return Ferramenta.find({}).lean();
+      return Ferramenta.find(filtroBusca).lean();
     } catch(err) {
       console.log(err);
       throw new Error("Erro ao tentar recuperar todas as ferramentas.");
@@ -21,11 +22,11 @@ const GerenciadorFerramentas = {
     }
   },
 
-  async criaFerramenta(id, url, usuario, nome, descricao, ciclos, video, desenvolvedor) {
+  async criaFerramenta(id, url, usuarioId, nome, descricao, ciclos, video, desenvolvedor) {
     const ferramenta = new Ferramenta({
       id,
       url,
-      usuario,
+      usuarioId,
       data: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
       nome,
       descricao,
@@ -153,6 +154,18 @@ const GerenciadorFerramentas = {
     } catch(err) {
       console.log(err);
       throw new Error("Erro ao tentar recuperar os favoritos do usuário.");
+    }
+  },
+
+  async recuperaTodasFerramentasSugeridasAprovadasPorUsuario(usuarioId) {
+    try {
+      return await Ferramenta.find({
+        usuarioId, 
+        status: "aprovado"
+      }).lean();
+    } catch (err) {
+      console.log(err);
+      throw new Error("Erro ao tentar recuperar as ferramentas sugeridas aprovadas do usuário.");
     }
   }
 

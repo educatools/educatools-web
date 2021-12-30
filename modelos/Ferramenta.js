@@ -30,6 +30,10 @@ const FerramentaSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  usuarioId: {
+    type: String,
+    required: true
+  },
   video: {
     type: String,
     required: false
