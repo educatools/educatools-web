@@ -1,6 +1,9 @@
 const moment = require('moment');
 
 module.exports = {
+  firstLetterUpperCase: function (word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  },
   formatDate: function (date, format) {
     return moment(date).utc().format(format)
   },

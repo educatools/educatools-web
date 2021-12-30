@@ -1,13 +1,11 @@
-<h1>Perfil público do usuário</h1>
-
 {{#if dados}}
-  <h3>{{dados.perfil.nomeExibicao}}</h3>
-  <h4>{{dados.perfil.profissao}}</h4>
-  <h5>{{dados.perfil.instituicao}}</h5>
-  <p>{{dados.perfil.minibio}}</p>
+  <h1>{{dados.perfil.nomeExibicao}}</h1>
+  <p>{{firstLetterUpperCase dados.perfil.profissao}} na instituição {{dados.perfil.instituicao}}</p>
+  <p><b>Sobre:</b> {{dados.perfil.minibio}}</p>
 
   {{#if favoritos}}
-  <h3>Minha ferramentas favoritas são:</h3>
+  <hr />
+  <h3>Minha ferramentas favoritas</h3>
   <ul>
     {{#each favoritos}}
       <li><a href="{{url}}" target="_blank">{{nome}}</a></li>
@@ -16,7 +14,8 @@
   {{/if}}
 
   {{#if ferramentas}}
-  <h3>Já sugeri as seguintes ferramentas:</h3>
+  <hr />
+  <h3>Já sugeri as seguintes ferramentas</h3>
   <ul>
     {{#each ferramentas}}
       <li><a href="{{url}}" target="_blank">{{nome}}</a></li>

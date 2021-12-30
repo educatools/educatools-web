@@ -4,10 +4,9 @@ const router = express.Router()
 const {ensureAuth} = require('../middleware/auth');
 
 const GerenciadorFerramentas = require('../servicos/GerenciadorFerramentas');
-
 const GerenciadorGruposFerramentas = require('../servicos/GerenciadorGruposFerramentas');
-
 const GerenciadorUsuarios = require('../servicos/GerenciadorUsuarios');
+const GerenciadorPerfis = require('../servicos/GerenciadorPerfis');
 
 router.get('/', ensureAuth, async(req, res) => {
   const {_id: usuarioId} = req.user;
@@ -106,7 +105,7 @@ router.get('/public/:id', async(req, res) => {
       return res.render('error/404');
     }
 
-    const usuario = await GerenciadorUsuarios.recuperaUsuarioPorId(grupo.usuarioId);
+    const perfil = await GerenciadorPerfis.recuperaPerfilPorUsuario(grupo.usuarioId);
   
     const {ferramentas:ferramentasIds} = grupo;
     const ferramentas = [];
@@ -115,7 +114,7 @@ router.get('/public/:id', async(req, res) => {
       ferramentas.push(ferramenta);
     }
   
-    res.render('grupos/public', { usuario, grupo, ferramentas });
+    res.render('grupos/public', { perfil, grupo, ferramentas });
   } catch(err) {
     console.log(err);
     res.render('error/505');

@@ -67,6 +67,7 @@ if (!isProducao()) {
 
 // Handlebars Helpers
 const {
+    firstLetterUpperCase,
     formatDate,
     checked,
     stripTags,
@@ -80,6 +81,7 @@ app.engine(
     '.hbs',
     exphbs({
         helpers: {
+            firstLetterUpperCase,
             formatDate,
             checked,
             stripTags,

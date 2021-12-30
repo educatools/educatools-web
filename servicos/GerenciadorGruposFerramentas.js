@@ -1,4 +1,3 @@
-const Ferramenta = require('../modelos/Ferramenta');
 const Grupo = require('../modelos/Grupo');
 
 const GerenciadorGruposFerramentas = {
