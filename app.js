@@ -12,6 +12,7 @@ const connectDB = require('./config/db');
 const cors = require('cors');
 
 const GerenciadorUsuarios = require('./servicos/GerenciadorUsuarios');
+const GerenciadorPerfis = require('./servicos/GerenciadorPerfis');
 
 // Carrega os arquivos de configuração (dev)
 if (!isProducao()) {
@@ -22,12 +23,13 @@ if (!isProducao()) {
 require('./config/local_passport')(passport);
 require('./config/google_passport')(passport);
 
-async function conectaBancoDedados() {
+async function conectaBancoDeDados() {
     await connectDB();
-    GerenciadorUsuarios.criaUsuarioAdministrador();
+    const usuarioAdmin = await GerenciadorUsuarios.criaUsuarioAdministrador();
+    await GerenciadorPerfis.criaNovoPerfil(usuarioAdmin._id, usuarioAdmin.nome);
 }
 
-conectaBancoDedados();
+conectaBancoDeDados();
 
 const app = express();
 
