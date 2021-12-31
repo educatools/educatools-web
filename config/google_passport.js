@@ -1,5 +1,6 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Usuario = require('../modelos/Usuario');
+const GerenciadorPerfis = require('../servicos/GerenciadorPerfis');
 
 module.exports = function (passport) {
   passport.use(
@@ -7,12 +8,9 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/login/google/callback',
+        callbackURL: process.env.GOOGLE_CLIENT_REDIRECT_URL || '/login/google/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
-
-        console.log("profile", profile);
-
         const novoUsuario = {
           googleId: profile.id,
           nome: profile.displayName
@@ -23,7 +21,10 @@ module.exports = function (passport) {
           if (usuario) {
             done(null, usuario);
           } else {
+            
+            // cria usuário e perfil
             usuario = await Usuario.create(novoUsuario)
+            await GerenciadorPerfis.criaNovoPerfil(usuario._id, usuario.nome);
             done(null, usuario)
           }
         } catch (err) {
