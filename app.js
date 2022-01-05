@@ -26,7 +26,7 @@ require('./config/google_passport')(passport);
 async function conectaBancoDeDados() {
     await connectDB();
     const usuarioAdmin = await GerenciadorUsuarios.criaUsuarioAdministrador();
-    await GerenciadorPerfis.criaNovoPerfil(usuarioAdmin._id, usuarioAdmin.nome);
+    if(usuarioAdmin) await GerenciadorPerfis.criaNovoPerfil(usuarioAdmin._id, usuarioAdmin.nome);
 }
 
 conectaBancoDeDados();
